@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"  # Проброс порта вашего приложения
+    depends_on:
+      - db  # Зависит от контейнера с базой данных
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: zhardem_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"  # Проброс порта PostgreSQL
