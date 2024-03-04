@@ -6,12 +6,14 @@ import com.app.zhardem.dto.auth.RegisterRequestDto;
 import com.app.zhardem.enums.Role;
 import com.app.zhardem.exceptions.JwtSubjectMissingException;
 import com.app.zhardem.exceptions.JwtTokenExpiredException;
+import com.app.zhardem.exceptions.entity.EntityAlreadyExistsException;
 import com.app.zhardem.jwt.JwtFactory;
 import com.app.zhardem.jwt.JwtParser;
 import com.app.zhardem.jwt.JwtValidator;
 import com.app.zhardem.models.User;
 import com.app.zhardem.repositories.UserRepository;
 import com.app.zhardem.services.AuthenticationService;
+import com.app.zhardem.services.PasswordResetService;
 import com.app.zhardem.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -34,9 +38,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtParser jwtParser;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    @Override
-    public AuthenticationResponseDto register(RegisterRequestDto request) {
 
+    @Override
+    @Transactional
+    public AuthenticationResponseDto register(RegisterRequestDto request) {
         userService.throwExceptionIfUserExists(request.email());
         User user = User.builder()
                  .email(request.email())
@@ -101,4 +106,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .refreshToken(refreshToken)
                 .build();
     }
+
+
+
+
 }
