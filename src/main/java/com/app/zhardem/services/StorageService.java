@@ -1,5 +1,5 @@
 package com.app.zhardem.services;
-
+/*
 import java.io.InputStream;
 
 public interface StorageService {
@@ -9,3 +9,4 @@ public interface StorageService {
     void deleteFile(String path);
 
 }
+*/

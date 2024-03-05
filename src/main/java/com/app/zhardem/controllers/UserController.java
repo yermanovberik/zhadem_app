@@ -23,11 +23,13 @@ public class UserController {
         return userService.getAllInfo(id);
     }
 
-
+/*
     @PostMapping("/{id}/profile-photo")
     public ResponseEntity<UserUploadPhotoDto> uploadProfilePhoto(@PathVariable("id") long id,
                                                               @RequestParam("file") MultipartFile file) {
         UserUploadPhotoDto responseDto = userService.uploadProfilePhoto(id, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
+
+ */
 }

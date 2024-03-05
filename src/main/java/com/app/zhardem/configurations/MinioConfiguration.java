@@ -1,5 +1,5 @@
 package com.app.zhardem.configurations;
-
+/*
 import com.app.zhardem.configurations.properties.MinioProperties;
 import io.minio.MinioClient;
 import lombok.RequiredArgsConstructor;
@@ -24,3 +24,4 @@ public class MinioConfiguration {
     }
 
 }
+*/

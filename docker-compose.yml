@@ -12,14 +12,4 @@ services:
     restart: always
     command: server /data
 
-  app:
-    image: yermanov/zhardem-app:latest
-    ports:
-      - "8080:8080"
-    depends_on:
-      - minio
-    environment:
-      MINIO_URL: https://zhadem-app.onrender.com
-      MINIO_ACCESS_KEY: minioadmin
-      MINIO_SECRET_KEY: minioadmin
 

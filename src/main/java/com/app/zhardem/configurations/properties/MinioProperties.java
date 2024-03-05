@@ -1,4 +1,5 @@
 package com.app.zhardem.configurations.properties;
+/*
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 
@@ -9,3 +10,4 @@ public record MinioProperties(
         String accessKey,
         String secretKey
 ) { }
+*/

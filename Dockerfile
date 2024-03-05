@@ -1,7 +1,3 @@
-ARG yermanov
-ARG zhardem_app
-
-
 FROM openjdk:17-jdk-slim AS build
 WORKDIR /app
 COPY ./gradle ./gradle

@@ -1,5 +1,4 @@
 package com.app.zhardem.services.impl;
-
 import com.app.zhardem.dto.user.UserAllInfo;
 import com.app.zhardem.dto.user.UserRequestDto;
 import com.app.zhardem.dto.user.UserResponseDto;
@@ -7,19 +6,15 @@ import com.app.zhardem.dto.user.UserUploadPhotoDto;
 import com.app.zhardem.enums.Role;
 import com.app.zhardem.exceptions.entity.EntityAlreadyExistsException;
 import com.app.zhardem.exceptions.entity.EntityNotFoundException;
-import com.app.zhardem.exceptions.server.InternalServerErrorException;
 import com.app.zhardem.models.User;
 import com.app.zhardem.repositories.UserRepository;
-import com.app.zhardem.services.StorageService;
 import com.app.zhardem.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 
 
 @Slf4j
@@ -30,8 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final StorageService storageService;
-
+/*
     @Override
     public UserUploadPhotoDto uploadProfilePhoto(long id, MultipartFile file) {
         try {
@@ -52,7 +46,7 @@ public class UserServiceImpl implements UserService {
             throw new InternalServerErrorException("Failed to upload profile photo: " + e.getMessage(), e);
         }
     }
-
+*/
 
     @Override
     public void throwExceptionIfUserExists(String email) {
