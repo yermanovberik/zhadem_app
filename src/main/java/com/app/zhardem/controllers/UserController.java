@@ -2,6 +2,7 @@ package com.app.zhardem.controllers;
 
 import com.app.zhardem.dto.user.UserAllInfo;
 import com.app.zhardem.dto.user.UserResponseDto;
+import com.app.zhardem.dto.user.UserUploadPhotoDto;
 import com.app.zhardem.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,9 @@ public class UserController {
 
 
     @PostMapping("/{id}/profile-photo")
-    public ResponseEntity<UserResponseDto> uploadProfilePhoto(@PathVariable("id") long id,
+    public ResponseEntity<UserUploadPhotoDto> uploadProfilePhoto(@PathVariable("id") long id,
                                                               @RequestParam("file") MultipartFile file) {
-        UserResponseDto responseDto = userService.uploadProfilePhoto(id, file);
+        UserUploadPhotoDto responseDto = userService.uploadProfilePhoto(id, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 }
