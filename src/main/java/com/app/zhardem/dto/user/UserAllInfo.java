@@ -8,6 +8,7 @@ import java.util.Date;
 public record UserAllInfo(
 
         String fullName,
+        String avatarPath,
         String IIN,
 
         Date birthDate,

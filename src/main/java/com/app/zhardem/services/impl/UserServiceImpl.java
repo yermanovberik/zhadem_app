@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
         User user = getEntityById(id);
 
         UserAllInfo responseDto = UserAllInfo.builder()
+                .avatarPath(user.getAvatarPath())
                 .IIN(user.getIIN())
                 .sex(user.getSex())
                 .region(user.getRegion())
