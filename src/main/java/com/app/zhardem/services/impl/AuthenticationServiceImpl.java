@@ -44,6 +44,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponseDto register(RegisterRequestDto request) {
         userService.throwExceptionIfUserExists(request.email());
         User user = User.builder()
+                .fullName(request.fullName())
                  .email(request.email())
                  .password(passwordEncoder.encode(request.password()))
                  .role(Role.USER)

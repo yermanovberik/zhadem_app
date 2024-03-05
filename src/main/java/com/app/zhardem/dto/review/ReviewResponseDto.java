@@ -4,8 +4,8 @@ import lombok.Builder;
 
 @Builder
 public record ReviewResponseDto(
-        Long id,
-        Long userId,
+       String name,
+       Long userId,
         int rating,
         String reviewText
 ) {

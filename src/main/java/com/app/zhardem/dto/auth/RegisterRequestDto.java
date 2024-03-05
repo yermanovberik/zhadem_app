@@ -8,13 +8,6 @@ import jakarta.validation.constraints.Size;
 
 public record RegisterRequestDto(
 
-        @NotBlank(message = "First name cannot be blank")
-        @Size(min = 2, max = 15, message = "First name must be between 2 and 15 characters")
-        @Pattern(
-                regexp = "^[A-Z][a-z]+$",
-                message = "First name must start with an uppercase letter and can include only letters"
-        )
-        String firstName,
 
         @NotBlank(message = "Last name cannot be blank")
         @Size(min = 2, max = 15, message = "Last name must be between 2 and 15 characters")
@@ -22,7 +15,7 @@ public record RegisterRequestDto(
                 regexp = "^[A-Z][a-z]+$",
                 message = "Last name must start with an uppercase letter and can include only letters"
         )
-        String lastName,
+        String fullName,
 
         @NotBlank(message = "Email cannot be blank")
         @Email(message = "Invalid email format")

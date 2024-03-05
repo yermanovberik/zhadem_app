@@ -43,7 +43,7 @@ public class SecurityConfiguration {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .clientRegistrationRepository(clientRegistrationRepository)
-                        .loginPage("https://zhadem-app.onrender.com//api/v1/auth/oauth")
+                        .loginPage("https://zhadem-app.onrender.com/api/v1/auth/oauth")
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

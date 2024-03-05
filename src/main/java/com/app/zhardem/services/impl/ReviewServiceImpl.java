@@ -10,6 +10,9 @@ import com.app.zhardem.services.ReviewService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +30,7 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewResponseDto getById(long id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new com.app.zhardem.exceptions.entity.EntityNotFoundException("Review with id "+ id + " not found."));
-
         ReviewResponseDto responseDto = ReviewResponseDto.builder()
-                .id(review.getId())
                 .userId(id)
                 .rating(review.getRating())
                 .reviewText(review.getReviewText()).build();
@@ -38,6 +39,12 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewResponseDto create(ReviewRequestDto requestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = " ";
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        }
+        log.info(username);
         User user = userRepository.findById(requestDto.userId())
                 .orElseThrow(() -> new EntityNotFoundException("User with id this "+ requestDto.userId() + "not ofund!"));
         Review review = Review.builder()
@@ -48,7 +55,7 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.save(review);
 
         ReviewResponseDto responseDto = ReviewResponseDto.builder()
-                .id(review.getId())
+                .name(user.getFullName())
                 .userId(requestDto.userId())
                 .rating(review.getRating())
                 .reviewText(review.getReviewText()).build();
@@ -99,16 +106,19 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewResponseDto> getAllReviews() {
         List<Review> reviews = reviewRepository.findAll();
 
-        List<ReviewResponseDto> responseDtos = reviews.stream()
+        List<ReviewResponseDto> responseDto = reviews.stream()
                 .map(review -> new ReviewResponseDto(
-                        review.getId(),
+                        review.getUser().getFullName(),
                         review.getUser().getId(),
                         review.getRating(),
                         review.getReviewText()
                 ))
                 .collect(Collectors.toList());
 
-        return responseDtos;
+        return responseDto;
     }
+
+
+
 
 }
