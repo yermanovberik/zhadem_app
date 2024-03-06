@@ -14,11 +14,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "review")
 public class Review {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @ManyToOne
     @JoinColumn(name = "user_id",referencedColumnName = "id")

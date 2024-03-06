@@ -30,6 +30,6 @@ public class UserController {
         UserUploadPhotoDto responseDto = userService.uploadProfilePhoto(id, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
+*/
 
- */
 }

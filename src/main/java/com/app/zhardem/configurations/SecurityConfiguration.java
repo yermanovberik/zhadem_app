@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         requests -> requests
                                 .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                .requestMatchers("/login/oauth2").permitAll()
+                                .requestMatchers("/login/oauth2/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(
@@ -43,7 +43,10 @@ public class SecurityConfiguration {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .clientRegistrationRepository(clientRegistrationRepository)
-                        .loginPage("https://zhadem-app.onrender.com/api/v1/auth/oauth")
+                        .authorizationEndpoint(
+                                authorizationEndpointConfig -> authorizationEndpointConfig.baseUri("/api/v1/auth/login/oauth2/code/google")
+                        )
+
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
@@ -52,6 +55,7 @@ public class SecurityConfiguration {
                         handler -> handler
                                 .authenticationEntryPoint(authenticationEntryPoint)
                 )
+
                 .build();
     }
 

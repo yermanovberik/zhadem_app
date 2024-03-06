@@ -1,4 +1,5 @@
-/*package com.app.zhardem.services.impl;
+/*
+package com.app.zhardem.services.impl;
 
 import com.app.zhardem.configurations.properties.MinioProperties;
 import com.app.zhardem.exceptions.entity.EntityNotFoundException;

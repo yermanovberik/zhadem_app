@@ -1,5 +1,6 @@
-package com.app.zhardem.configurations.properties;
 /*
+package com.app.zhardem.configurations.properties;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 

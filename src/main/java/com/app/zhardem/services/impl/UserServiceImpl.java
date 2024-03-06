@@ -6,6 +6,7 @@ import com.app.zhardem.dto.user.UserUploadPhotoDto;
 import com.app.zhardem.enums.Role;
 import com.app.zhardem.exceptions.entity.EntityAlreadyExistsException;
 import com.app.zhardem.exceptions.entity.EntityNotFoundException;
+import com.app.zhardem.exceptions.server.InternalServerErrorException;
 import com.app.zhardem.models.User;
 import com.app.zhardem.repositories.UserRepository;
 import com.app.zhardem.services.UserService;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-/*
+    /*
+
     @Override
     public UserUploadPhotoDto uploadProfilePhoto(long id, MultipartFile file) {
         try {
@@ -42,12 +43,12 @@ public class UserServiceImpl implements UserService {
                     .id(user.getId())
                     .photoUrl(profilePhotoPath)
                     .build();
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new InternalServerErrorException("Failed to upload profile photo: " + e.getMessage(), e);
         }
     }
-*/
 
+*/
     @Override
     public void throwExceptionIfUserExists(String email) {
         userRepository.findByEmail(email)

@@ -1,5 +1,4 @@
 spring:
-
   security:
     oauth2:
       client:
@@ -9,10 +8,10 @@ spring:
             client-secret: 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
             redirect-uri: http://localhost:8080/api/v1/review
   datasource:
-    url: jdbc:postgresql://dpg-cng0ptmct0pc738eh14g-a.oregon-postgres.render.com/zhardem_db
-    username: zhadem_db
-    password: FSiqlUNrfOv3ZV3mLmy0qmO8bfYhEey8
-    driver-class-name: org.postgresql.Driver
+    url: "jdbc:postgresql://dpg-cnjjqmqcn0vc73c2dvdg-a.singapore-postgres.render.com:5432/zhardem_db_v6l6"
+    username: "zhardem_db_v6l6_user"
+    password: "dljO8MxYRiskDI48FbDjK37rXS4Wjf4i"
+    driver-class-name: "org.postgresql.Driver"
   jpa:
     show-sql: true
     properties:
