@@ -1,4 +1,3 @@
-/*
 package com.app.zhardem.configurations;
 
 import com.app.zhardem.configurations.properties.MinioProperties;
@@ -11,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class MinioConfiguration {
 
-
+    private final MinioProperties minioProperties;
     @Bean
     public MinioClient minioClient() {
         return MinioClient.builder()
@@ -24,4 +23,3 @@ public class MinioConfiguration {
     }
 
 }
-*/

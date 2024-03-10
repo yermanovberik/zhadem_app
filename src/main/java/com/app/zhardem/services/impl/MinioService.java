@@ -1,4 +1,4 @@
-/*
+
 package com.app.zhardem.services.impl;
 
 import com.app.zhardem.configurations.properties.MinioProperties;
@@ -154,4 +154,3 @@ public class MinioService implements StorageService {
         }
     }
 }
-*/

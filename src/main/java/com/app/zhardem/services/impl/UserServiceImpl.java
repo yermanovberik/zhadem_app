@@ -1,20 +1,19 @@
 package com.app.zhardem.services.impl;
-import com.app.zhardem.dto.user.UserAllInfo;
-import com.app.zhardem.dto.user.UserRequestDto;
-import com.app.zhardem.dto.user.UserResponseDto;
-import com.app.zhardem.dto.user.UserUploadPhotoDto;
+import com.app.zhardem.dto.user.*;
 import com.app.zhardem.enums.Role;
 import com.app.zhardem.exceptions.entity.EntityAlreadyExistsException;
 import com.app.zhardem.exceptions.entity.EntityNotFoundException;
 import com.app.zhardem.exceptions.server.InternalServerErrorException;
 import com.app.zhardem.models.User;
 import com.app.zhardem.repositories.UserRepository;
+import com.app.zhardem.services.StorageService;
 import com.app.zhardem.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Slf4j
@@ -25,9 +24,10 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    /*
+    private final StorageService storageService;
 
     @Override
+    @Transactional
     public UserUploadPhotoDto uploadProfilePhoto(long id, MultipartFile file) {
         try {
             User user = getEntityById(id);
@@ -48,7 +48,30 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-*/
+    @Override
+    @Transactional
+    public UserAllInfo uploadFullInfo(long id,UserFullInfoDto request) {
+        User user = getEntityById(id);
+        user.setAddress(request.address());
+        user.setCity(request.city());
+        user.setIIN(request.IIN());
+        user.setRegion(request.region());
+        user.setSex(request.sex());
+        user.setBirthDate(request.birthDate());
+
+        UserAllInfo responseDto = UserAllInfo.builder()
+                .region(user.getRegion())
+                .sex(user.getSex())
+                .IIN(user.getIIN())
+                .birthDate(user.getBirthDate())
+                .address(user.getAddress())
+                .fullName(user.getFullName())
+                .avatarPath(user.getAvatarPath())
+                .build();
+        return responseDto;
+    }
+
+
     @Override
     public void throwExceptionIfUserExists(String email) {
         userRepository.findByEmail(email)
@@ -79,7 +102,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto getById(long id) {
-        return null;
+        User user = getEntityById(id);
+
+        UserResponseDto responseDto = UserResponseDto.builder()
+                .id(id)
+                .email(user.getEmail())
+                .role(Role.USER)
+                .build();
+
+        return responseDto;
     }
 
     @Override
@@ -112,6 +143,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(long id) {
         log.info("Deleting User with ID: {}", id);
 
@@ -120,6 +152,7 @@ public class UserServiceImpl implements UserService {
 
         log.info("Deleted User with ID: {}", user.getId());
     }
+
 
     @Override
     public User getEntityById(long id) {

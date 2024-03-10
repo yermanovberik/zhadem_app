@@ -19,8 +19,12 @@ public class Review {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id",referencedColumnName = "id")
+    private Doctor doctor;
 
     @Column(name = "rating")
     private int rating;
@@ -28,3 +32,5 @@ public class Review {
     @Column(name = "review_text")
     private String reviewText;
 }
+
+
