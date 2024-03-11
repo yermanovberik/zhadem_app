@@ -21,7 +21,7 @@ spring:
       ddl-auto: update
 minio:
   bucket-name: zhardemapp
-  endpoint: http://sea-lion-app-usoaj.ondigitalocean.app:9000
+  endpoint: http://minio:9000
   access-key: minioadmin
   secret-key: minioadmin
 
