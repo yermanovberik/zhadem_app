@@ -24,6 +24,7 @@ public class MinioService implements StorageService {
     public String uploadFile(String filePath, InputStream inputStream) {
         try {
             log.info("Uploading file with file name: {}", filePath);
+            log.info("Uploading file with file name: {}", filePath);
 
             ObjectWriteResponse objectWriteResponse = minioClient.putObject(
                     PutObjectArgs.builder()
