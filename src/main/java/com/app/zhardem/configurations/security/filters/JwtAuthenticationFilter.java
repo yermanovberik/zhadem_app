@@ -42,7 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        logger.info("write some logs");
 
         String jwt = JwtUtils.extractJwtFromHeader(authHeader);
 

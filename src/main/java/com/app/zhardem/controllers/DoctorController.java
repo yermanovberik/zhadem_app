@@ -2,17 +2,12 @@ package com.app.zhardem.controllers;
 
 import com.app.zhardem.dto.doctor.DoctorRequestDto;
 import com.app.zhardem.dto.doctor.DoctorResponseDto;
-import com.app.zhardem.dto.review.ReviewRequestDto;
-import com.app.zhardem.dto.review.ReviewResponseDto;
 import com.app.zhardem.services.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.simpleframework.xml.Path;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @Validated

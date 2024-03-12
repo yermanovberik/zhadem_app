@@ -114,7 +114,6 @@ public class GlobalExceptionHandler {
                 httpStatus,
                 response.getErrorMessage()
         );
-
         return new ResponseEntity<>(response, httpStatus);
     }
 
