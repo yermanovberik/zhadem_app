@@ -16,6 +16,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Scanner;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -45,6 +47,9 @@ public class SecurityConfiguration {
                         .clientRegistrationRepository(clientRegistrationRepository)
                         .authorizationEndpoint(
                                 authorizationEndpointConfig -> authorizationEndpointConfig.baseUri("/api/v1/auth/login/oauth2/code/google")
+                        )
+                        .redirectionEndpoint(
+                                redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/api/v1/redirect_url")
                         )
 
                 )

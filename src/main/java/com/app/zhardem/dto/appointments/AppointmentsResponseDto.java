@@ -1,6 +1,11 @@
 package com.app.zhardem.dto.appointments;
 
-public record AppointmentsResponseDto(
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
+public record AppointmentsResponseDto(
+        LocalTime time,
+
+        boolean disable
 ) {
 }

@@ -85,4 +85,12 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " does not exists"));
     }
+
+    @Override
+    public Category getEntityByName(String name) {
+        return categoryRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Category with id " + name + " does not exists"));
+    }
+
+
 }

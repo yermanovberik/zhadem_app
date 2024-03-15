@@ -41,4 +41,7 @@ public class Appointments {
 
     @Column(name = "amount_paid")
     private int amountPaid;
+
+    @Column(name = "disabled")
+    private boolean disabled;
 }

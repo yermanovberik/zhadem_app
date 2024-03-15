@@ -8,10 +8,12 @@ spring:
             client-secret: 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
             redirect-uri: http://localhost:8080/api/v1/review
   datasource:
-    url: "jdbc:postgresql://dpg-cnjjqmqcn0vc73c2dvdg-a.singapore-postgres.render.com:5432/zhardem_db_v6l6"
-    username: "zhardem_db_v6l6_user"
-    password: "dljO8MxYRiskDI48FbDjK37rXS4Wjf4i"
+    url: jdbc:postgresql://localhost:5432/zhardem_db
+    username: postgres
+    password: postgres
     driver-class-name: org.postgresql.Driver
+    hikari:
+      max-lifetime: 600000
   jpa:
     show-sql: true
     properties:

@@ -29,8 +29,6 @@ public class Article {
     @Column(name = "publication_date")
     private LocalDateTime publicationDate;
 
-    private String category;
-
     @Column(name = "tags")
     private String tags;
 

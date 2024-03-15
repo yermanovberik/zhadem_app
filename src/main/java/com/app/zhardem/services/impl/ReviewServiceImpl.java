@@ -2,8 +2,10 @@ package com.app.zhardem.services.impl;
 
 import com.app.zhardem.dto.review.ReviewRequestDto;
 import com.app.zhardem.dto.review.ReviewResponseDto;
+import com.app.zhardem.models.Doctor;
 import com.app.zhardem.models.Review;
 import com.app.zhardem.models.User;
+import com.app.zhardem.repositories.DoctorRepository;
 import com.app.zhardem.repositories.ReviewRepository;
 import com.app.zhardem.repositories.UserRepository;
 import com.app.zhardem.services.ReviewService;
@@ -25,12 +27,14 @@ import java.util.stream.Collectors;
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
+    private final DoctorRepository doctorRepository;
 
     @Override
     public ReviewResponseDto getById(long id) {
         Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new com.app.zhardem.exceptions.entity.EntityNotFoundException("Review with id "+ id + " not found."));
+                .orElseThrow(() -> new EntityNotFoundException("Review with id "+ id + " not found."));
         ReviewResponseDto responseDto = ReviewResponseDto.builder()
+                .name(review.getUser().getFullName())
                 .userId(id)
                 .rating(review.getRating())
                 .reviewText(review.getReviewText()).build();
@@ -39,16 +43,14 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewResponseDto create(ReviewRequestDto requestDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = " ";
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        }
-        log.info(username);
         User user = userRepository.findById(requestDto.userId())
-                .orElseThrow(() -> new EntityNotFoundException("User with id this "+ requestDto.userId() + "not ofund!"));
+                .orElseThrow(() -> new EntityNotFoundException("User with this id"+ requestDto.userId() + " not found!"));
+
+        Doctor doctor = doctorRepository.findById(requestDto.doctorId())
+                .orElseThrow(() -> new EntityNotFoundException("Doctor with this id " + requestDto.doctorId() + " not found!"));
         Review review = Review.builder()
                 .reviewText(requestDto.reviewText())
+                .doctor(doctor)
                 .user(user)
                 .rating(requestDto.rating())
                 .build();

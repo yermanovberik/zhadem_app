@@ -49,3 +49,7 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+bootBuildImage {
+	imageName = 'akzamus/ctf-platform:dev'
+}

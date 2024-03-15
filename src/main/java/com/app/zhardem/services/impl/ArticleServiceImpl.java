@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,6 @@ public class ArticleServiceImpl implements ArticleService {
                 .tags(article.getTags())
                 .title(article.getTitle())
                 .publicationDate(article.getPublicationDate())
-                .category(article.getCategory())
                 .imagePath(article.getImagePath())
                 .title(article.getTitle()).build();
 
@@ -40,7 +40,6 @@ public class ArticleServiceImpl implements ArticleService {
                 .tags(requestDto.tags())
                 .title(requestDto.title())
                 .publicationDate(requestDto.publicationDate())
-                .category(requestDto.category())
                 .imagePath(requestDto.imagePath())
                 .title(requestDto.title()).build();
 
@@ -53,7 +52,6 @@ public class ArticleServiceImpl implements ArticleService {
                 .tags(article.getTags())
                 .title(article.getTitle())
                 .publicationDate(article.getPublicationDate())
-                .category(article.getCategory())
                 .imagePath(article.getImagePath())
                 .title(article.getTitle()).build();
 
@@ -78,4 +76,6 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Article with id " + id + " not found!"));
     }
+
+
 }
