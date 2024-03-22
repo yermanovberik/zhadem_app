@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -66,6 +67,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Appointments> appointments;
+
+    @OneToMany(mappedBy = "user")
+    private List<Payment> paymentMethods;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

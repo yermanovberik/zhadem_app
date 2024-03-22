@@ -18,8 +18,6 @@ public class DoctorController {
 
     private final DoctorService doctorService;
 
-
-
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public DoctorResponseDto getDoctorById(@PathVariable long id) {

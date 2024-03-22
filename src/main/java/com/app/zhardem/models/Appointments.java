@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -30,7 +32,7 @@ public class Appointments {
     private Doctor doctor;
 
     @Column(name = "date")
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column(name = "time")
     private LocalTime time;
@@ -44,4 +46,7 @@ public class Appointments {
 
     @Column(name = "disabled")
     private boolean disabled;
+
+    @Column(name = "status")
+    private String status;
 }

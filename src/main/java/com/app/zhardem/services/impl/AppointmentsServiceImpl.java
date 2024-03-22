@@ -14,14 +14,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+
 
 
 @Slf4j
@@ -32,31 +31,32 @@ public class AppointmentsServiceImpl implements AppointmentsService {
     private final AppointmentsRepository appointmentsRepository;
     private final UserRepository userRepository;
 
+    @Override
     public List<AppointmentsResponseDto> getDoctorAvailability(Long doctorId, int dayNumber) {
+        LocalDate appointmentDate = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), dayNumber);
         Doctor doctor = doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new EntityNotFoundException("Doctor with id " + doctorId  +" not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("Doctor with id " + doctorId + " does not exist."));
 
-        List<LocalTime> availableTimes = generateAvailableTimes(dayNumber);
-
-        LocalDate currentDate = LocalDate.now();
-
-        LocalDate targetDate = currentDate.plusDays(dayNumber);
-
-        LocalDateTime startOfDay = targetDate.atStartOfDay();
-        List<Appointments> bookedAppointments = appointmentsRepository.findByDoctorAndDate(doctor, startOfDay);
-
-
-        Set<LocalTime> bookedTimes = bookedAppointments.stream()
+        List<Appointments> existingAppointments = appointmentsRepository.findByDoctorAndDate(doctor, appointmentDate);
+        Set<LocalTime> bookedTimes = existingAppointments.stream()
                 .map(Appointments::getTime)
                 .collect(Collectors.toSet());
 
-        return availableTimes.stream()
-                .map(time -> {
-                    boolean disable = bookedTimes.contains(time);
-                    return new AppointmentsResponseDto(time, disable);
-                })
-                .collect(Collectors.toList());
+        List<AppointmentsResponseDto> availableTimeSlots = new ArrayList<>();
+        LocalTime startTime = LocalTime.of(9, 0); // Начало рабочего дня
+        LocalTime endTime = LocalTime.of(18, 0); // Конец рабочего дня
+        long step = Duration.ofHours(1).toMinutes(); // Шаг в один час
+
+        for (LocalTime time = startTime; time.isBefore(endTime); time = time.plusMinutes(step)) {
+            boolean isDisabled = bookedTimes.contains(time);
+            availableTimeSlots.add(new AppointmentsResponseDto(time.toString(), isDisabled));
+        }
+
+        return availableTimeSlots;
     }
+
+
+
     public boolean bookAppointment(Long doctorId, LocalDateTime dateTime, Long userId) {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new EntityNotFoundException("Doctor with id " + doctorId  +" not found!"));
@@ -66,12 +66,15 @@ public class AppointmentsServiceImpl implements AppointmentsService {
 
         Optional<Appointments> existingAppointment = appointmentsRepository.findByDoctorAndDateAndTime(doctor, dateTime.toLocalDate(), dateTime.toLocalTime());
         if (existingAppointment.isPresent()) {
-            throw new RuntimeException("This appointment is already booked.");
+            throw new EntityNotFoundException("This appointment is already booked.");
         }
 
         Appointments appointment = new Appointments();
         appointment.setDoctor(doctor);
-        appointment.setDate(dateTime);
+        appointment.setDate(dateTime.toLocalDate());
+        appointment.setTime(dateTime.toLocalTime());
+        appointment.setStatus("IN PROGRESS");
+        appointment.setDisabled(true);
         appointment.setUser(user);
         appointmentsRepository.save(appointment);
         return true;
@@ -86,19 +89,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
     }
 
 
-    private List<LocalTime> generateAvailableTimes(int dayNumber) {
-        List<LocalTime> availableTimes = new ArrayList<>();
-        availableTimes.add(LocalTime.of(9, 0));
-        availableTimes.add(LocalTime.of(10, 0));
-        availableTimes.add(LocalTime.of(11, 0));
-        availableTimes.add(LocalTime.of(13, 0));
-        availableTimes.add(LocalTime.of(14, 0));
-        availableTimes.add(LocalTime.of(15, 0));
-        availableTimes.add(LocalTime.of(16, 0));
-        availableTimes.add(LocalTime.of(17, 0));
-        availableTimes.add(LocalTime.of(18, 0));
-        return availableTimes;
-    }
+
     @Override
     public AppointmentsResponseDto getById(long id) {
         return null;

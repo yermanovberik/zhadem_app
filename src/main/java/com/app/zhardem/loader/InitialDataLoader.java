@@ -22,7 +22,7 @@ public class InitialDataLoader {
     private final AppointmentsRepository appointmentsRepository;
     private final DoctorRepository doctorRepository;
 
-    @PostConstruct
+    //@PostConstruct
     public void loadData() {
         List<Doctor> doctors = doctorRepository.findAll();
         for (Doctor doctor : doctors) {
@@ -37,7 +37,7 @@ public class InitialDataLoader {
 
             Appointments appointments = Appointments.builder()
                     .doctor(doctor)
-                    .date(appointmentDateTime)
+                    .date(LocalDate.from(appointmentDateTime))
                     .time(appointmentDateTime.toLocalTime())
                     .disabled(false)
                     .build();

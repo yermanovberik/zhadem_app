@@ -22,6 +22,11 @@ repositories {
 }
 
 dependencies {
+	implementation group: 'org.springframework', name: 'spring-messaging', version: '6.1.5'
+	implementation group: 'org.springframework', name: 'spring-websocket', version: '6.1.5'
+	implementation 'com.paypal.sdk:paypal-core:1.7.2'
+	implementation 'com.paypal.sdk:rest-api-sdk:1.14.0'
+
 	implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.0.2'
 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
