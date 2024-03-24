@@ -3,10 +3,9 @@ import com.app.zhardem.dto.user.*;
 import com.app.zhardem.enums.Role;
 import com.app.zhardem.exceptions.entity.EntityAlreadyExistsException;
 import com.app.zhardem.exceptions.entity.EntityNotFoundException;
-import com.app.zhardem.exceptions.server.InternalServerErrorException;
 import com.app.zhardem.models.User;
 import com.app.zhardem.repositories.UserRepository;
-import com.app.zhardem.services.StorageService;
+import com.app.zhardem.services.FileService;
 import com.app.zhardem.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,27 +23,22 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final StorageService storageService;
+    private final FileService fileService;
 
     @Override
     @Transactional
     public UserUploadPhotoDto uploadProfilePhoto(long id, MultipartFile file) {
         try {
+
+            String fileName = fileService.uploadFile(file);
+
             User user = getEntityById(id);
-
-            String filePath = "profiles/" + user.getId() + "/" + file.getOriginalFilename();
-            String profilePhotoPath = storageService.uploadFile(filePath, file.getInputStream());
-
-            user.setAvatarPath(profilePhotoPath);
+            user.setAvatarPath(fileName);
             userRepository.save(user);
 
-            return UserUploadPhotoDto.builder()
-                    .role(Role.USER)
-                    .id(user.getId())
-                    .photoUrl(profilePhotoPath)
-                    .build();
+            return new UserUploadPhotoDto(user.getId(), user.getFullName());
         } catch (Exception e) {
-            throw new InternalServerErrorException("Failed to upload profile photo: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to upload profile photo", e);
         }
     }
 

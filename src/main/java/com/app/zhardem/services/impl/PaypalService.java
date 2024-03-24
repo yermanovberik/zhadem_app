@@ -40,8 +40,8 @@ public class PaypalService {
 
         Payment payment = new Payment();
         payment.setIntent(intent);
-        payment.setPayer(payer);
 
+        payment.setPayer(payer);
         RedirectUrls redirectUrls = new RedirectUrls();
         redirectUrls.setCancelUrl(cancelUrl);
         redirectUrls.setReturnUrl(successUrl);

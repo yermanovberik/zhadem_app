@@ -3,6 +3,7 @@ package com.app.zhardem.configurations;
 
 import com.app.zhardem.configurations.security.filters.ExceptionHandlerFilter;
 import com.app.zhardem.configurations.security.filters.JwtAuthenticationFilter;
+import com.app.zhardem.services.impl.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +13,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.Scanner;
 
 @Configuration
 @EnableWebSecurity
@@ -28,6 +29,7 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final ClientRegistrationRepository clientRegistrationRepository;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -49,11 +51,13 @@ public class SecurityConfiguration {
                                 authorizationEndpointConfig -> authorizationEndpointConfig.baseUri("/api/v1/auth/login/oauth2/code/google")
                         )
                         .redirectionEndpoint(
-                                redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/api/v1/redirect_url")
+                                redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/api/v1/asd")
                         )
-
+                        .userInfoEndpoint(
+                                userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService)
+                        )
                 )
-                .authenticationProvider(authenticationProvider)
+               .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
                 .exceptionHandling(

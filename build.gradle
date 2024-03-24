@@ -22,6 +22,14 @@ repositories {
 }
 
 dependencies {
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.686'
+
+	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.4'
+
+	implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk-bom', version: '1.12.686', ext: 'pom'
+
 	implementation group: 'org.springframework', name: 'spring-messaging', version: '6.1.5'
 	implementation group: 'org.springframework', name: 'spring-websocket', version: '6.1.5'
 	implementation 'com.paypal.sdk:paypal-core:1.7.2'

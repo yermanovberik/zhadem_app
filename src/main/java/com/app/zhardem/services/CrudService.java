@@ -9,7 +9,4 @@ public interface CrudService<ENTITY, REQUEST, RESPONSE> {
 
     ENTITY getEntityById(long id);
 
-
-
-
 }

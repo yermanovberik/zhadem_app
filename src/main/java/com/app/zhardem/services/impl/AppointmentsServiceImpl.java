@@ -2,6 +2,7 @@ package com.app.zhardem.services.impl;
 
 import com.app.zhardem.dto.appointments.AppointmentsRequestDto;
 import com.app.zhardem.dto.appointments.AppointmentsResponseDto;
+import com.app.zhardem.enums.Status;
 import com.app.zhardem.exceptions.entity.EntityNotFoundException;
 import com.app.zhardem.models.Appointments;
 import com.app.zhardem.models.Doctor;
@@ -13,6 +14,7 @@ import com.app.zhardem.services.AppointmentsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -43,9 +45,9 @@ public class AppointmentsServiceImpl implements AppointmentsService {
                 .collect(Collectors.toSet());
 
         List<AppointmentsResponseDto> availableTimeSlots = new ArrayList<>();
-        LocalTime startTime = LocalTime.of(9, 0); // Начало рабочего дня
-        LocalTime endTime = LocalTime.of(18, 0); // Конец рабочего дня
-        long step = Duration.ofHours(1).toMinutes(); // Шаг в один час
+        LocalTime startTime = LocalTime.of(9, 0);
+        LocalTime endTime = LocalTime.of(18, 0);
+        long step = Duration.ofHours(1).toMinutes();
 
         for (LocalTime time = startTime; time.isBefore(endTime); time = time.plusMinutes(step)) {
             boolean isDisabled = bookedTimes.contains(time);
@@ -73,7 +75,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
         appointment.setDoctor(doctor);
         appointment.setDate(dateTime.toLocalDate());
         appointment.setTime(dateTime.toLocalTime());
-        appointment.setStatus("IN PROGRESS");
+        appointment.setStatus(Status.IN_PROGRESS.toString());
         appointment.setDisabled(true);
         appointment.setUser(user);
         appointmentsRepository.save(appointment);
@@ -92,7 +94,9 @@ public class AppointmentsServiceImpl implements AppointmentsService {
 
     @Override
     public AppointmentsResponseDto getById(long id) {
-        return null;
+        Appointments appointments = appointmentsRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment with id " + id + " not found!"));
+      return null;
     }
 
     @Override
@@ -106,8 +110,11 @@ public class AppointmentsServiceImpl implements AppointmentsService {
     }
 
     @Override
+    @Transactional
     public void delete(long id) {
-
+        Appointments appointments = appointmentsRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment with id " + id + " not found!"));
+        appointmentsRepository.delete(appointments);
     }
 
     @Override

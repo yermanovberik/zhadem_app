@@ -5,19 +5,47 @@ import com.app.zhardem.services.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
+@Slf4j
 public class UserController {
     private final UserService userService;
+    @GetMapping("/success")
+    public ResponseEntity<?> getUserData(Authentication authentication) {
+        // Если Spring Security успешно аутентифицировал пользователя,
+        // то вы можете получить данные пользователя из объекта Authentication
+        OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
 
+        // Получаем необходимые данные пользователя
+        String email = oauthUser.getAttribute("email");
+        String name = oauthUser.getAttribute("name");
+        // ... другие данные
+        log.info(email);
+        log.info("Name " + name);
+
+        // Создаем DTO или Map с данными пользователя для возврата в ответе
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("name", name);
+        userInfo.put("email", email);
+
+
+        // Возвращаем данные пользователя
+        return ResponseEntity.ok(userInfo);
+    }
     @GetMapping("/all-info/{id}")
     public UserAllInfo getAllInfo(@PathVariable long id){
         return userService.getAllInfo(id);

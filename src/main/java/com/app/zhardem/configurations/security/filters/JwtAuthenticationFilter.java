@@ -42,7 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-
         String jwt = JwtUtils.extractJwtFromHeader(authHeader);
 
         UserDetails userDetails = jwtParser

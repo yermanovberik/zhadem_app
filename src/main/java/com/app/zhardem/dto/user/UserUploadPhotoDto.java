@@ -6,7 +6,6 @@ import lombok.Builder;
 @Builder
 public record UserUploadPhotoDto(
         long id,
-        String photoUrl,
-        Role role
+        String photoUrl
 ) {
 }
