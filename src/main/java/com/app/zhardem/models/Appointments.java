@@ -1,5 +1,6 @@
 package com.app.zhardem.models;
 
+import com.app.zhardem.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Stack;
 
 @Entity
 @Data
@@ -48,5 +50,5 @@ public class Appointments {
     private boolean disabled;
 
     @Column(name = "status")
-    private String status;
+    private Status status;
 }

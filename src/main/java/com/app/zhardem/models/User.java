@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -70,6 +71,12 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Payment> paymentMethods;
+
+    @Column(name = "reset_code")
+    private String resetCode;
+
+    @Column(name = "reset_code_expiration")
+    private LocalDateTime resetCodeExpiration;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

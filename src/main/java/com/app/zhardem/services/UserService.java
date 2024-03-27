@@ -13,4 +13,5 @@ public interface UserService extends CrudService<User, UserRequestDto, UserRespo
    UserUploadPhotoDto uploadProfilePhoto(long id, MultipartFile file);
 
    UserAllInfo uploadFullInfo(long id,UserFullInfoDto responseDto);
+
 }

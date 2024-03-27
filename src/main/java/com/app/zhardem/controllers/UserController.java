@@ -2,6 +2,7 @@ package com.app.zhardem.controllers;
 
 import com.app.zhardem.dto.user.*;
 import com.app.zhardem.services.UserService;
+import com.app.zhardem.services.impl.PasswordResetService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,11 @@ import java.util.Map;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/password")
 @Slf4j
 public class UserController {
     private final UserService userService;
+    private final PasswordResetService passwordResetService;
     @GetMapping("/success")
     public ResponseEntity<?> getUserData(Authentication authentication) {
         // Если Spring Security успешно аутентифицировал пользователя,
@@ -90,6 +92,24 @@ public class UserController {
             @RequestBody @Valid UserFullInfoDto request) {
         UserAllInfo responseDto = userService.uploadFullInfo(id, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    @PostMapping("/request-reset")
+    public ResponseEntity<?> requestPasswordReset(@RequestParam String email) {
+        passwordResetService.sendResetCode(email);
+        return ResponseEntity.ok("Verification code sent.");
+    }
+
+    @PostMapping("/validate-code")
+    public ResponseEntity<?> validateResetCode(@RequestParam String email, @RequestParam String code) {
+        boolean isValid = passwordResetService.validateResetCode(email, code);
+        return isValid ? ResponseEntity.ok("Code is valid.") : ResponseEntity.badRequest().body("Invalid code.");
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity<?> resetPassword(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) {
+        boolean isSuccess = passwordResetService.resetPassword(email, code, newPassword);
+        return isSuccess ? ResponseEntity.ok("Password has been reset.") : ResponseEntity.badRequest().body("Password reset failed.");
     }
 
 }

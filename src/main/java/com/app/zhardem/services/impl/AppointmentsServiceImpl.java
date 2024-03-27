@@ -75,7 +75,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
         appointment.setDoctor(doctor);
         appointment.setDate(dateTime.toLocalDate());
         appointment.setTime(dateTime.toLocalTime());
-        appointment.setStatus(Status.IN_PROGRESS.toString());
+        appointment.setStatus(Status.IN_PROGRESS);
         appointment.setDisabled(true);
         appointment.setUser(user);
         appointmentsRepository.save(appointment);

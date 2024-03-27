@@ -1,5 +1,6 @@
 package com.app.zhardem.services.impl;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.app.zhardem.exceptions.FileDownloadException;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -80,6 +82,19 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    public URL generatePresignedUrl(String objectKey, int expirationInMinutes) {
+        Date expiration = new Date();
+        long expTimeMillis = expiration.getTime();
+        expTimeMillis += 1000 * 60 * expirationInMinutes;
+        expiration.setTime(expTimeMillis);
+
+        GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                new GeneratePresignedUrlRequest(bucketName, objectKey)
+                        .withMethod(HttpMethod.GET)
+                        .withExpiration(expiration);
+
+        return s3Client.generatePresignedUrl(generatePresignedUrlRequest);
+    }
     @Override
     public boolean delete(String fileName) {
         File file = Paths.get(fileName).toFile();

@@ -20,10 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.net.URL;
+import java.util.*;
+
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/file")
@@ -73,21 +72,13 @@ public class FileUploadController {
 
 
     @GetMapping("/download/{id}")
-    public ResponseEntity<?> downloadFile(@PathVariable long id) throws FileDownloadException, IOException {
+    public ResponseEntity<?> getDownloadUrl(@PathVariable long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User with this id"+id+"not found "));
+                .orElseThrow(() -> new EntityNotFoundException("User with this id "+ id +" not found"));
         String fileName = user.getAvatarPath();
-        Object response = fileService.downloadFile(fileName);
-        if (response != null){
-            return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"").body(response);
-        } else {
-            APIResponse apiResponse = APIResponse.builder()
-                    .message("File could not be downloaded")
-                    .isSuccessful(false)
-                    .statusCode(400)
-                    .build();
-            return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
-        }
+        URL presignedUrl = fileService.generatePresignedUrl(fileName, 60); // URL действителен 60 минут
+
+        return ResponseEntity.ok().body(Map.of("url", presignedUrl.toString()));
     }
 
     @DeleteMapping("/delete")

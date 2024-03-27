@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -37,7 +36,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         requests -> requests
-                                .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/v3/api-docs/**","/payment/create").permitAll()
+                                .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/v3/api-docs/**","/oauth2/authorization/google","/api/v1/succes","/api/v1/password/**").permitAll()
                                 .requestMatchers("/login/oauth2/**").permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -47,17 +46,14 @@ public class SecurityConfiguration {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .clientRegistrationRepository(clientRegistrationRepository)
-                        .authorizationEndpoint(
-                                authorizationEndpointConfig -> authorizationEndpointConfig.baseUri("/api/v1/auth/login/oauth2/code/google")
-                        )
                         .redirectionEndpoint(
-                                redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/api/v1/asd")
+                                redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/api/v1/success")
                         )
                         .userInfoEndpoint(
                                 userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService)
                         )
                 )
-               .authenticationProvider(authenticationProvider)
+                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
                 .exceptionHandling(
