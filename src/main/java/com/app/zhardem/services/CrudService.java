@@ -1,6 +1,5 @@
 package com.app.zhardem.services;
 
-import java.io.IOException;
 
 public interface CrudService<ENTITY, REQUEST, RESPONSE> {
 

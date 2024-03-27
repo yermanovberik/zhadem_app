@@ -27,11 +27,15 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
 
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0"
+
 	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.686'
 
 	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.4'
 
 	implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+	implementation group: 'com.stripe', name: 'stripe-java', version: '24.21.0'
+
 
 	implementation group: 'com.amazonaws', name: 'aws-java-sdk-bom', version: '1.12.686', ext: 'pom'
 

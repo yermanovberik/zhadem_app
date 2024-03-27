@@ -1,0 +1,18 @@
+stages:
+  - build
+  - push
+
+variables:
+  DOCKER_IMAGE_NAME: yermanov/appzhardem
+  DOCKER_IMAGE_TAG: latest
+
+build:
+  stage: build
+  image: docker:19.03
+  services:
+    - docker:19.03-dind
+  before_script:
+    - docker login -u yermanov -p dckr_pat_WrKV3KZ4hVqY7o6WRhqIfRuueSM
+  script:
+    - docker build -t appzhardem-app:latest .
+    - docker push appzhardem-app:latest
