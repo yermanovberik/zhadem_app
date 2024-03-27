@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -107,18 +108,22 @@ public class ArticleServiceImpl implements ArticleService {
         List<ArticleResponseDto> responseDtos = new ArrayList<>();
 
         for (Article article : randomArticles) {
+            String fileName= article.getImagePath();
+            URL presignedUrl = fileService.generatePresignedUrl(fileName, 600);
+            String url = presignedUrl.toString();
             ArticleResponseDto responseDto = ArticleResponseDto.builder()
                     .title(article.getTitle())
                     .publicationDate(article.getPublicationDate())
                     .author(article.getAuthor())
                     .tags(article.getTags())
-                    .imagePath(article.getImagePath())
-                     .build();
+                    .imagePath(url)
+                    .build();
             responseDtos.add(responseDto);
         }
 
         return responseDtos;
     }
+
 
     @Override
     public List<String> getPopularArticles() {
@@ -141,12 +146,15 @@ public class ArticleServiceImpl implements ArticleService {
         List<ArticleResponseDto> responseDtos = new ArrayList<>();
 
         for (Article article : randomArticles) {
+            String fileName= article.getImagePath();
+            URL presignedUrl = fileService.generatePresignedUrl(fileName, 600);
+            String url = presignedUrl.toString();
             ArticleResponseDto responseDto = ArticleResponseDto.builder()
                     .title(article.getTitle())
                     .publicationDate(article.getPublicationDate())
                     .author(article.getAuthor())
                     .tags(article.getTags())
-                    .imagePath(article.getImagePath())
+                    .imagePath(url)
                     .build();
             responseDtos.add(responseDto);
         }
@@ -160,12 +168,15 @@ public class ArticleServiceImpl implements ArticleService {
 
         List<ArticleResponseDto> responseDtos = new ArrayList<>();
         for (Article article : articles) {
+            String fileName= article.getImagePath();
+            URL presignedUrl = fileService.generatePresignedUrl(fileName, 600);
+            String url = presignedUrl.toString();
             ArticleResponseDto responseDto = ArticleResponseDto.builder()
                     .title(article.getTitle())
                     .publicationDate(article.getPublicationDate())
                     .author(article.getAuthor())
                     .tags(article.getTags())
-                    .imagePath(article.getImagePath())
+                    .imagePath(url)
                     .build();
             responseDtos.add(responseDto);
         }

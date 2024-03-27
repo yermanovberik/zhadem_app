@@ -76,7 +76,7 @@ public class FileUploadController {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with this id "+ id +" not found"));
         String fileName = user.getAvatarPath();
-        URL presignedUrl = fileService.generatePresignedUrl(fileName, 60); // URL действителен 60 минут
+        URL presignedUrl = fileService.generatePresignedUrl(fileName, 60);
 
         return ResponseEntity.ok().body(Map.of("url", presignedUrl.toString()));
     }
