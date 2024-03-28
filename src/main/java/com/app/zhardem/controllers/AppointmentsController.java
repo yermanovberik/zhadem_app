@@ -1,6 +1,7 @@
 package com.app.zhardem.controllers;
 
 import com.app.zhardem.dto.appointments.AppointmentsResponseDto;
+import com.app.zhardem.exceptions.entity.EntityNotFoundException;
 import com.app.zhardem.models.Appointments;
 import com.app.zhardem.services.AppointmentsService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Validated
@@ -32,6 +34,27 @@ public class AppointmentsController {
             return ResponseEntity.ok("Appointment booked successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/bookOrUpdate")
+    public ResponseEntity<String> bookOrUpdateAppointment(@RequestParam Long doctorId,
+                                                          @RequestParam String dateTime,
+                                                          @RequestParam Long userId) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy | hh:mm a");
+            LocalDateTime appointmentDateTime = LocalDateTime.parse(dateTime, formatter);
+
+            boolean result = appointmentsService.bookOrUpdateAppointment(doctorId, appointmentDateTime, userId);
+            if (result) {
+                return ResponseEntity.ok("Appointment booked/updated successfully.");
+            } else {
+                return ResponseEntity.ok("Failed to book/update appointment.");
+            }
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("An error occurred while booking/updating the appointment.");
         }
     }
 

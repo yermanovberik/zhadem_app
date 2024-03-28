@@ -44,7 +44,7 @@ public class Appointments {
     private Payment payment;
 
     @Column(name = "amount_paid")
-    private int amountPaid;
+    private long amountPaid;
 
     @Column(name = "disabled")
     private boolean disabled;

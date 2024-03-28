@@ -148,6 +148,7 @@ public class ArticleServiceImpl implements ArticleService {
         for (Article article : randomArticles) {
             String fileName= article.getImagePath();
             URL presignedUrl = fileService.generatePresignedUrl(fileName, 600);
+            log.info(presignedUrl.getQuery());
             String url = presignedUrl.toString();
             ArticleResponseDto responseDto = ArticleResponseDto.builder()
                     .title(article.getTitle())
@@ -161,7 +162,6 @@ public class ArticleServiceImpl implements ArticleService {
 
         return responseDtos;
     }
-
 
     public List<ArticleResponseDto> searchByQuery(String query) {
         List<Article> articles = articleRepository.findByTitleContainingOrContentContaining(query);

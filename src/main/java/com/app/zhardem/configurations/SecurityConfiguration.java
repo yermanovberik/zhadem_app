@@ -40,26 +40,6 @@ public class SecurityConfiguration {
                                 .requestMatchers("/login/oauth2/**").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .sessionManagement(
-                        session -> session
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .clientRegistrationRepository(clientRegistrationRepository)
-                        .redirectionEndpoint(
-                                redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/api/v1/success")
-                        )
-                        .userInfoEndpoint(
-                                userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService)
-                        )
-                )
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
-                .exceptionHandling(
-                        handler -> handler
-                                .authenticationEntryPoint(authenticationEntryPoint)
-                )
 
                 .build();
     }

@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface ReviewService extends CrudService<Review, ReviewRequestDto, ReviewResponseDto> {
     List<ReviewResponseDto> getAllReviews();
+
+    List<ReviewResponseDto> getReviewsOfDoctor(long doctorId);
 }

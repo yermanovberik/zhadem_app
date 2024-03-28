@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new EntityNotFoundException("User with this id"+ requestDto.userId() + " not found!"));
 
         Doctor doctor = doctorRepository.findById(requestDto.doctorId())
-                .orElseThrow(() -> new EntityNotFoundException("Doctor with this id " + requestDto.doctorId() + " not found!"));
+                .orElseThrow(() -> new com.app.zhardem.exceptions.entity.EntityNotFoundException("Doctor with this id " + requestDto.doctorId() + " not found!"));
         Review review = Review.builder()
                 .reviewText(requestDto.reviewText())
                 .doctor(doctor)
@@ -120,7 +121,29 @@ public class ReviewServiceImpl implements ReviewService {
         return responseDto;
     }
 
+    @Override
+    public List<ReviewResponseDto> getReviewsOfDoctor(long doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new com.app.zhardem.exceptions.entity.EntityNotFoundException("Doctor with this id " + doctorId + " not found!"));
 
+        List<Review> reviews = reviewRepository.findByDoctor(doctor);
+
+        List<ReviewResponseDto> reviewOfDoctor = new ArrayList<>();
+
+        for(Review review : reviews){
+            ReviewResponseDto responseDto = ReviewResponseDto.builder()
+                    .reviewText(review.getReviewText())
+                    .rating(review.getRating())
+                    .userId(review.getUser().getId())
+                    .rating(review.getRating())
+                    .name(review.getUser().getFullName())
+                    .build();
+
+            reviewOfDoctor.add(responseDto);
+        }
+
+        return reviewOfDoctor;
+    }
 
 
 }

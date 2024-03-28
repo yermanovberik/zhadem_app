@@ -4,53 +4,70 @@ import com.app.zhardem.dto.CapturePaymentResponse;
 import com.app.zhardem.dto.CreatePaymentRequest;
 import com.app.zhardem.dto.CreatePaymentResponse;
 import com.app.zhardem.dto.StripeResponses;
+import com.app.zhardem.exceptions.entity.EntityNotFoundException;
+import com.app.zhardem.models.Appointments;
+import com.app.zhardem.models.Doctor;
+import com.app.zhardem.models.User;
+import com.app.zhardem.repositories.AppointmentsRepository;
+import com.app.zhardem.repositories.DoctorRepository;
+import com.app.zhardem.repositories.UserRepository;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.model.checkout.Session;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class StripeService {
+    private AppointmentsRepository appointmentsRepository;
+    private DoctorRepository doctorRepository;
+    private UserRepository userRepository;
 
     public StripeResponses createPayment(CreatePaymentRequest createPaymentRequest) {
         Stripe.apiKey = "sk_test_51NvFT9DMd4BkEMbZ6ui5Cm5kCG7PVY07WleHTmmvOXmydkZsYLne6YrjiJqjIjVFZyYiYBzPvApOw5mrR4SkIs3i00Oo9ETQ5L";
+        Appointments appointments = appointmentsRepository.findById(createPaymentRequest.getAppointmentID())
+                .orElseThrow(() -> new EntityNotFoundException("Appoinment with id " + createPaymentRequest.getAppointmentID() + " not found!"));
 
-        // Create a PaymentIntent with the order amount and currency
+        Doctor doctor = doctorRepository.findById(createPaymentRequest.getDoctorID())
+                .orElseThrow(() -> new EntityNotFoundException("Doctor with this id " + createPaymentRequest.getDoctorID() + " not found!"));
+
+        User user = userRepository.findById(createPaymentRequest.getUserID())
+                .orElseThrow(() -> new EntityNotFoundException("User with this id " + createPaymentRequest.getUserID() + " not fonud!"));
+
+        String name = doctor.getFullName() + " doctor is booking for the date " + appointments.getDate() + " on time " + appointments.getTime();
+
         SessionCreateParams.LineItem.PriceData.ProductData productData =
                 SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                        .setName(createPaymentRequest.getName())
+                        .setName(name)
                         .build();
 
-        // Create new line item with the above product data and associated price
         SessionCreateParams.LineItem.PriceData priceData =
                 SessionCreateParams.LineItem.PriceData.builder()
-                        .setCurrency(createPaymentRequest.getCurrency())
-                        .setUnitAmount(createPaymentRequest.getAmount())
+                        .setCurrency("USD")
+                        .setUnitAmount(appointments.getAmountPaid())
                         .setProductData(productData)
                         .build();
 
-        // Create new line item with the above price data
         SessionCreateParams.LineItem lineItem =
                 SessionCreateParams
                         .LineItem.builder()
-                        .setQuantity(createPaymentRequest.getQuantity())
+                        .setQuantity(1L)
                         .setPriceData(priceData)
                         .build();
 
-        // Create new session with the line items
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setSuccessUrl(createPaymentRequest.getSuccessUrl())
-                        .setCancelUrl(createPaymentRequest.getCancelUrl())
+                        .setSuccessUrl("http://localhost:8080/success")
+                        .setCancelUrl("http://localhost:8080/cancel")
                         .addLineItem(lineItem)
                         .build();
 
-        // Create new session
         Session session;
         try {
             session = Session.create(params);
@@ -79,10 +96,8 @@ public class StripeService {
             String status = session.getStatus();
 
             if (status.equalsIgnoreCase("200")) {
-                // Handle logic for successful payment
                 log.info("Payment successfully captured.");
-            } // Handle more statuses
-
+            }
             CapturePaymentResponse responseData = CapturePaymentResponse
                     .builder()
                     .sessionId(sessionId)

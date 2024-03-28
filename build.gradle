@@ -37,7 +37,6 @@ dependencies {
 	implementation group: 'com.stripe', name: 'stripe-java', version: '24.21.0'
 
 
-	implementation group: 'com.amazonaws', name: 'aws-java-sdk-bom', version: '1.12.686', ext: 'pom'
 
 	implementation group: 'org.springframework', name: 'spring-messaging', version: '6.1.5'
 	implementation group: 'org.springframework', name: 'spring-websocket', version: '6.1.5'

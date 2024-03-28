@@ -44,7 +44,7 @@ public class OpenApiConfiguration {
                 )
                 .info(
                         new Info()
-                                .title("CTF platform")
+                                .title("Zhardem platform")
                                 .description("A platform for conducting team Olympiads on computer networks")
                                 .version("1.0.0")
                 );

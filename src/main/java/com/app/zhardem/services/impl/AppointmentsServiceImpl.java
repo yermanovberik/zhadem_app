@@ -1,11 +1,13 @@
 package com.app.zhardem.services.impl;
 
+import com.app.zhardem.dto.PaymentTotal;
 import com.app.zhardem.dto.appointments.AppointmentsRequestDto;
 import com.app.zhardem.dto.appointments.AppointmentsResponseDto;
 import com.app.zhardem.enums.Status;
 import com.app.zhardem.exceptions.entity.EntityNotFoundException;
 import com.app.zhardem.models.Appointments;
 import com.app.zhardem.models.Doctor;
+import com.app.zhardem.models.Payment;
 import com.app.zhardem.models.User;
 import com.app.zhardem.repositories.AppointmentsRepository;
 import com.app.zhardem.repositories.DoctorRepository;
@@ -77,10 +79,38 @@ public class AppointmentsServiceImpl implements AppointmentsService {
         appointment.setTime(dateTime.toLocalTime());
         appointment.setStatus(Status.IN_PROGRESS);
         appointment.setDisabled(true);
+        appointment.setAmountPaid(doctor.getPriceOfDoctor());
         appointment.setUser(user);
         appointmentsRepository.save(appointment);
         return true;
     }
+
+    public boolean bookOrUpdateAppointment(Long doctorId, LocalDateTime dateTime, Long userId) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new EntityNotFoundException("Doctor with id " + doctorId  +" not found!"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId  +" not found!"));
+
+        Optional<Appointments> existingAppointment = appointmentsRepository.findByDoctorAndDateAndTime(doctor, dateTime.toLocalDate(), dateTime.toLocalTime());
+
+        Appointments appointment;
+        if (existingAppointment.isPresent()) {
+            appointment = existingAppointment.get();
+        } else {appointment = new Appointments();
+            appointment.setDoctor(doctor);
+            appointment.setDate(dateTime.toLocalDate());
+            appointment.setTime(dateTime.toLocalTime());
+            appointment.setStatus(Status.IN_PROGRESS);
+            appointment.setDisabled(true);
+            appointment.setUser(user);
+        }
+
+        appointment.setAmountPaid(doctor.getPriceOfDoctor());
+        appointmentsRepository.save(appointment);
+        return true;
+    }
+
 
     public boolean cancelAppointment(Long appointmentId) {
         Appointments appointment = appointmentsRepository.findById(appointmentId)
@@ -90,6 +120,20 @@ public class AppointmentsServiceImpl implements AppointmentsService {
         return true;
     }
 
+
+    public PaymentTotal getPrice(Long appointmentId){
+        Appointments appointments = appointmentsRepository.findById(appointmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment with id " + appointmentId + " not found!"));
+
+        PaymentTotal paymentTotal = PaymentTotal.builder()
+                .injection(appointments.getAmountPaid())
+                .drip(0.10)
+                .total(appointments.getAmountPaid()+0.10)
+                .build();
+
+        return paymentTotal;
+
+    }
 
 
     @Override

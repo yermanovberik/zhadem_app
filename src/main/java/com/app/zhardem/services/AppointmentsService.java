@@ -2,6 +2,7 @@ package com.app.zhardem.services;
 
 import com.app.zhardem.dto.appointments.AppointmentsRequestDto;
 import com.app.zhardem.dto.appointments.AppointmentsResponseDto;
+import com.app.zhardem.enums.Status;
 import com.app.zhardem.exceptions.entity.EntityNotFoundException;
 import com.app.zhardem.models.Appointments;
 import com.app.zhardem.models.Doctor;
@@ -19,5 +20,7 @@ public interface AppointmentsService extends CrudService<Appointments, Appointme
     boolean bookAppointment(Long doctorId, LocalDateTime dateTime, Long userId);
 
     boolean cancelAppointment(Long appointmentId);
+
+    boolean bookOrUpdateAppointment(Long doctorId, LocalDateTime dateTime, Long userId);
 
 }

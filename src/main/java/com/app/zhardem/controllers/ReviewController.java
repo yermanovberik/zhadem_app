@@ -48,4 +48,10 @@ public class ReviewController {
     public void deleteReview(@PathVariable long id) {
         reviewService.delete(id);
     }
+
+    @GetMapping("/doctor/{doctorId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ReviewResponseDto> getReviewOfDoctor(@PathVariable long doctorId){
+        return reviewService.getReviewsOfDoctor(doctorId);
+    }
 }

@@ -50,10 +50,6 @@ application:
             refresh-token-expiration: 604800000 # 7 days
 
     time-zone: Z
-paypal:
-  client-id: AciClmVrEq7EwUAkQEtVE_MEQzKgINueC7S9RjRqe6NyQNreDoScKODDAOTuK9M5SDn3YEmAqkHTLDSd
-  client-secret: EFpmQGIL49gtbYjmGkrrWrYU_boWKfVpsHBLjhJughLKyF1FiZHXf-7tB2hhe_akNzgkJEPEokyD_KWz
-  mode: sandbox
 stripe:
   secretKey: sk_test_51NvFT9DMd4BkEMbZ6ui5Cm5kCG7PVY07WleHTmmvOXmydkZsYLne6YrjiJqjIjVFZyYiYBzPvApOw5mrR4SkIs3i00Oo9ETQ5L
 

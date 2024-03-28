@@ -37,6 +37,9 @@ public class Doctor {
     @Column(name = "about_text")
     private String aboutText;
 
+    @Column(name = "price_of_doctor")
+    private int priceOfDoctor;
+
     @OneToMany(mappedBy = "doctor")
     private List<Review> reviews;
 
