@@ -32,16 +32,30 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        requests -> requests
-                                .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/v3/api-docs/**","/oauth2/authorization/google","/api/v1/succes","/api/v1/password/**"," /stripe/payment/**").permitAll()
-                                .requestMatchers("/login/oauth2/**").permitAll()
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/payment/create", "/api/v1/password/**").permitAll()
+                        .requestMatchers("/oauth2/authorization/google").permitAll()
+                        .anyRequest().authenticated()
                 )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .clientRegistrationRepository(clientRegistrationRepository)
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)
+                        )
 
-                .build();
+                )
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                );
+
+        return http.build();
     }
 
 

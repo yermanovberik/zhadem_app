@@ -6,9 +6,11 @@ import com.app.zhardem.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +31,16 @@ public class PasswordResetService {
 
         emailService.sendEmailWithCode(email, code);
     }
+    public String forgotYourPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found"));
+
+        String resetToken = UUID.randomUUID().toString();
+        user.setResetToken(resetToken);
+        user.setResetTokenExpiration(LocalDateTime.now().plusHours(1));
+        userRepository.save(user);
+        return resetToken;
+    }
 
 
     private void saveResetCode(String email, String code) {
@@ -39,24 +51,22 @@ public class PasswordResetService {
     }
 
 
-    public boolean validateResetCode(String email, String code) {
-        return userRepository.findByEmail(email)
-                .filter(user -> code.equals(user.getResetCode()))
-                .filter(user -> user.getResetCodeExpiration().isAfter(LocalDateTime.now()))
+    public boolean validateResetToken(String token) {
+        return userRepository.findByResetToken(token)
+                .filter(user -> user.getResetTokenExpiration().isAfter(LocalDateTime.now()))
                 .isPresent();
     }
 
-    public boolean resetPassword(String email, String code, String newPassword) {
-        if (validateResetCode(email, code)) {
-            User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new EntityNotFoundException("User with email: " + email + " not found."));
+    @Transactional
+    public boolean resetPassword(String token, String newPassword) {
+        User user = userRepository.findByResetToken(token)
+                .filter(u -> u.getResetTokenExpiration().isAfter(LocalDateTime.now()))
+                .orElseThrow(() -> new EntityNotFoundException("Invalid or expired reset token"));
 
-            user.setPassword(passwordEncoder.encode(newPassword));
-            user.setResetCode(null);
-            user.setResetCodeExpiration(null);
-            userRepository.save(user);
-            return true;
-        }
-        return false;
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setResetToken(null);
+        user.setResetTokenExpiration(null);
+        userRepository.save(user);
+        return true;
     }
 }

@@ -1,5 +1,6 @@
 package com.app.zhardem.controllers;
 
+import com.app.zhardem.dto.doctor.DoctopTopResponse;
 import com.app.zhardem.dto.doctor.DoctorRequestDto;
 import com.app.zhardem.dto.doctor.DoctorResponseDto;
 import com.app.zhardem.services.DoctorService;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Validated
@@ -39,5 +42,10 @@ public class DoctorController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDoctor(@PathVariable long id) {
         doctorService.delete(id);
+    }
+
+    @GetMapping("/getTopDoctor")
+    public List<DoctopTopResponse> getTopDoctor(){
+        return doctorService.findTopDoctor();
     }
 }

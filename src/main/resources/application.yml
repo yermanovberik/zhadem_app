@@ -1,4 +1,6 @@
 spring:
+  jmx:
+    enabled: false
   mail:
     host: smtp.gmail.com
     port: 587
@@ -19,9 +21,14 @@ spring:
             scope:
               - email
               - profile
+              - email
+              - address
+              - phone
             client-id: 609756543286-sm69ucl3n8m36ri8motg0odu0q1dpinq.apps.googleusercontent.com
             client-secret: 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
             redirect-uri: http://localhost:8080/api/v1/review
+            clientName: "Google"
+
   datasource:
     url: jdbc:postgresql://dpg-co1g9mect0pc73dbtrrg-a.oregon-postgres.render.com/zhardem_db_6tld
     username: zhardem_db_6tld_user
@@ -34,14 +41,17 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: update
+
 springdoc:
   swagger-ui:
     operations-sorter: method
   override-with-generic-response: true
+
 aws:
   accessKey: AKIAYURL6RHVHNNB72VR
   secretKey: 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
   bucketName: medicalapp
+
 application:
     security:
         jwt:
@@ -50,7 +60,6 @@ application:
             refresh-token-expiration: 604800000 # 7 days
 
     time-zone: Z
+
 stripe:
   secretKey: sk_test_51NvFT9DMd4BkEMbZ6ui5Cm5kCG7PVY07WleHTmmvOXmydkZsYLne6YrjiJqjIjVFZyYiYBzPvApOw5mrR4SkIs3i00Oo9ETQ5L
-
-

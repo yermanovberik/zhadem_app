@@ -1,6 +1,7 @@
 package com.app.zhardem.services.impl;
 
 import com.app.zhardem.dto.category.CategoryRequestDto;
+import com.app.zhardem.dto.doctor.DoctopTopResponse;
 import com.app.zhardem.dto.doctor.DoctorRequestDto;
 import com.app.zhardem.dto.doctor.DoctorResponseDto;
 import com.app.zhardem.exceptions.entity.EntityAlreadyExistsException;
@@ -16,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Slf4j
@@ -49,6 +52,7 @@ public class DoctorServiceImpl implements DoctorService {
                 .distance(requestDto.distance())
                 .fullName(requestDto.fullName())
                 .specialization(requestDto.specialization())
+                .priceOfDoctor(requestDto.priceOfDoctor())
                 .build();
 
         doctorRepository.save(doctor);
@@ -90,4 +94,25 @@ public class DoctorServiceImpl implements DoctorService {
                     );
                 });
     }
+
+    @Override
+    public List<DoctopTopResponse> findTopDoctor() {
+        List<Object[]> topDoctorsData = doctorRepository.findTopDoctors();
+
+        List<DoctopTopResponse> responses = new ArrayList<>();
+        for(Object[] row : topDoctorsData){
+            DoctopTopResponse response = new DoctopTopResponse(
+                    (String) row[1],
+                    (String) row[4],
+                    (String) row[2],
+                    (Double) row[3],
+                    (Double) row[5]
+            );
+
+            responses.add(response);
+        }
+
+        return responses;
+    }
+
 }

@@ -85,7 +85,7 @@ public class FileServiceImpl implements FileService {
     public URL generatePresignedUrl(String objectKey, int expirationInMinutes) {
         Date expiration = new Date();
         long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * expirationInMinutes;
+        expTimeMillis += 1000L * 60 * expirationInMinutes;
         expiration.setTime(expTimeMillis);
 
         GeneratePresignedUrlRequest generatePresignedUrlRequest =
@@ -95,6 +95,7 @@ public class FileServiceImpl implements FileService {
 
         return s3Client.generatePresignedUrl(generatePresignedUrlRequest);
     }
+
     @Override
     public boolean delete(String fileName) {
         File file = Paths.get(fileName).toFile();

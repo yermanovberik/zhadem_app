@@ -60,7 +60,6 @@ public class AppointmentsServiceImpl implements AppointmentsService {
     }
 
 
-
     public boolean bookAppointment(Long doctorId, LocalDateTime dateTime, Long userId) {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new EntityNotFoundException("Doctor with id " + doctorId  +" not found!"));
@@ -80,6 +79,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
         appointment.setStatus(Status.IN_PROGRESS);
         appointment.setDisabled(true);
         appointment.setAmountPaid(doctor.getPriceOfDoctor());
+        log.info("Price of doctor "+ doctor.getPriceOfDoctor());
         appointment.setUser(user);
         appointmentsRepository.save(appointment);
         return true;

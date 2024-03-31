@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 
 @Slf4j
 @Service
@@ -65,6 +67,7 @@ public class UserServiceImpl implements UserService {
         return responseDto;
     }
 
+
  
 
 
@@ -109,6 +112,33 @@ public class UserServiceImpl implements UserService {
 
         return responseDto;
     }
+
+    @Override
+    public UserResponseDto findOrCreateUser(String email,Map<String, Object> attributes) {
+        log.info("Finding or creating User with email: {}", email);
+
+        User user = userRepository.findByEmail(email)
+                .orElseGet(() -> {
+                    log.info("User with email: {} not found, creating a new one", email);
+                    User newUser = User.builder()
+                            .email(email)
+                            .fullName((String) attributes.get("name")) // Пример, зависит от структуры attributes
+                            .role(Role.USER) // Предполагаем, что Role - это enum в вашей модели User
+                            .build();
+                    return userRepository.save(newUser);
+                });
+
+        // Создаем UserResponseDto для ответа
+        UserResponseDto responseDto = UserResponseDto.builder()
+                .email(user.getEmail())
+                .role(user.getRole())
+                // Добавьте другие поля в ответ, если необходимо
+                .build();
+
+        log.info("User with email: {} processed", email);
+        return responseDto;
+    }
+
 
     @Override
     public UserResponseDto create(UserRequestDto requestDto) {
@@ -156,6 +186,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with ID " + id + " does not exist"));
     }
+
 
 
 }

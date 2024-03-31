@@ -6,7 +6,10 @@ import com.app.zhardem.dto.review.ReviewResponseDto;
 import com.app.zhardem.services.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.index.qual.SameLen;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,12 +18,13 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api/v1/review")
 public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @GetMapping
+   @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ReviewResponseDto> getAllReviews(){
         return reviewService.getAllReviews();
@@ -54,4 +58,6 @@ public class ReviewController {
     public List<ReviewResponseDto> getReviewOfDoctor(@PathVariable long doctorId){
         return reviewService.getReviewsOfDoctor(doctorId);
     }
+
 }
+

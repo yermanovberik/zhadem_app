@@ -5,7 +5,7 @@ public record DoctorRequestDto(
         double distance,
         String specialization,
         String aboutText,
-        String category
-
+        String category,
+        int priceOfDoctor
 ) {
 }

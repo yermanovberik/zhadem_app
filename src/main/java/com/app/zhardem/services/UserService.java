@@ -1,8 +1,14 @@
 package com.app.zhardem.services;
 
 import com.app.zhardem.dto.user.*;
+import com.app.zhardem.enums.Role;
+import com.app.zhardem.exceptions.entity.EntityNotFoundException;
 import com.app.zhardem.models.User;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.UUID;
 
 public interface UserService extends CrudService<User, UserRequestDto, UserResponseDto> {
 
@@ -13,5 +19,7 @@ public interface UserService extends CrudService<User, UserRequestDto, UserRespo
    UserUploadPhotoDto uploadProfilePhoto(long id, MultipartFile file);
 
    UserAllInfo uploadFullInfo(long id,UserFullInfoDto responseDto);
+
+     UserResponseDto findOrCreateUser(String email,Map<String, Object> attributes);
 
 }

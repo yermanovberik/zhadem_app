@@ -17,6 +17,7 @@ import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.model.checkout.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -24,8 +25,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class StripeService {
+    @Autowired
     private AppointmentsRepository appointmentsRepository;
+
+    @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     public StripeResponses createPayment(CreatePaymentRequest createPaymentRequest) {
@@ -40,7 +46,6 @@ public class StripeService {
                 .orElseThrow(() -> new EntityNotFoundException("User with this id " + createPaymentRequest.getUserID() + " not fonud!"));
 
         String name = doctor.getFullName() + " doctor is booking for the date " + appointments.getDate() + " on time " + appointments.getTime();
-
         SessionCreateParams.LineItem.PriceData.ProductData productData =
                 SessionCreateParams.LineItem.PriceData.ProductData.builder()
                         .setName(name)
@@ -67,7 +72,6 @@ public class StripeService {
                         .setCancelUrl("http://localhost:8080/cancel")
                         .addLineItem(lineItem)
                         .build();
-
         Session session;
         try {
             session = Session.create(params);

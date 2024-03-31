@@ -78,6 +78,12 @@ public class User implements UserDetails {
     @Column(name = "reset_code_expiration")
     private LocalDateTime resetCodeExpiration;
 
+    @Column(name = "reset_token")
+    private String resetToken;
+
+    @Column(name = "reset_token_expiration")
+    private LocalDateTime resetTokenExpiration;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role.name()));

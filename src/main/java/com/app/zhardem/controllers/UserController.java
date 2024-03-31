@@ -26,28 +26,7 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
     private final PasswordResetService passwordResetService;
-    @GetMapping("/success")
-    public ResponseEntity<?> getUserData(Authentication authentication) {
-        // Если Spring Security успешно аутентифицировал пользователя,
-        // то вы можете получить данные пользователя из объекта Authentication
-        OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
 
-        // Получаем необходимые данные пользователя
-        String email = oauthUser.getAttribute("email");
-        String name = oauthUser.getAttribute("name");
-        // ... другие данные
-        log.info(email);
-        log.info("Name " + name);
-
-        // Создаем DTO или Map с данными пользователя для возврата в ответе
-        Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("name", name);
-        userInfo.put("email", email);
-
-
-        // Возвращаем данные пользователя
-        return ResponseEntity.ok(userInfo);
-    }
     @GetMapping("/all-info/{id}")
     public UserAllInfo getAllInfo(@PathVariable long id){
         return userService.getAllInfo(id);
@@ -97,19 +76,19 @@ public class UserController {
     @PostMapping("/request-reset")
     public ResponseEntity<?> requestPasswordReset(@RequestParam String email) {
         passwordResetService.sendResetCode(email);
-        return ResponseEntity.ok("Verification code sent.");
+        String resetToken = passwordResetService.forgotYourPassword(email);
+        return ResponseEntity.ok(resetToken);
     }
 
     @PostMapping("/validate-code")
-    public ResponseEntity<?> validateResetCode(@RequestParam String email, @RequestParam String code) {
-        boolean isValid = passwordResetService.validateResetCode(email, code);
+    public ResponseEntity<?> validateResetCode(@RequestHeader("token") String token) {
+        boolean isValid = passwordResetService.validateResetToken(token);
         return isValid ? ResponseEntity.ok("Code is valid.") : ResponseEntity.badRequest().body("Invalid code.");
     }
 
     @PostMapping("/reset")
-    public ResponseEntity<?> resetPassword(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) {
-        boolean isSuccess = passwordResetService.resetPassword(email, code, newPassword);
+    public ResponseEntity<?> resetPassword(@RequestHeader("token") String token, @RequestParam String newPassword) {
+        boolean isSuccess = passwordResetService.resetPassword(token, newPassword);
         return isSuccess ? ResponseEntity.ok("Password has been reset.") : ResponseEntity.badRequest().body("Password reset failed.");
     }
-
 }
