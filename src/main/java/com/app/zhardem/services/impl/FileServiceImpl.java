@@ -35,26 +35,32 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String uploadFile(MultipartFile multipartFile) throws IOException {
-        File file = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        // Проверка и создание временного файла
+        File file = File.createTempFile("upload-", FilenameUtils.getExtension(multipartFile.getOriginalFilename()));
         try (FileOutputStream fileOutputStream = new FileOutputStream(file)){
             fileOutputStream.write(multipartFile.getBytes());
         }
 
+        // Генерация имени файла и метаданных для загрузки
         String fileName = generateFileName(multipartFile);
-
-        PutObjectRequest request = new PutObjectRequest(bucketName, fileName, file);
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType("plain/"+ FilenameUtils.getExtension(multipartFile.getOriginalFilename()));
+        metadata.setContentType(multipartFile.getContentType()); // Установка правильного MIME типа
         metadata.addUserMetadata("Title", "File Upload - " + fileName);
-        metadata.setContentLength(file.length());
-        request.setMetadata(metadata);
+        metadata.setContentLength(multipartFile.getSize());
+        metadata.setContentDisposition("inline"); // Установка Content-Disposition
+
+        // Выполнение запроса на загрузку файла
+        PutObjectRequest request = new PutObjectRequest(bucketName, fileName, file).withMetadata(metadata);
         s3Client.putObject(request);
 
-        // delete file
-        file.delete();
+        // Удаление временного файла
+        if (!file.delete()) {
+            log.warn("Could not delete temporary file: " + file.getPath());
+        }
 
         return fileName;
     }
+
 
     @Override
     public Object downloadFile(String fileName) throws FileDownloadException, IOException {
