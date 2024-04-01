@@ -44,7 +44,7 @@ public class AuthenticationController {
 
         String clientId = "609756543286-sm69ucl3n8m36ri8motg0odu0q1dpinq.apps.googleusercontent.com";
         String clientSecret = "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";
-        String redirectUri = "http://localhost:8080/api/v1/auth/oauth";
+        String redirectUri = "https://sea-lion-app-usoaj.ondigitalocean.app/api/v1/auth/oauth";
         String tokenEndpoint = "https://oauth2.googleapis.com/token";
 
         RestTemplate restTemplate = new RestTemplate();
