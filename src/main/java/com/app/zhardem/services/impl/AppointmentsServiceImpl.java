@@ -3,11 +3,11 @@ package com.app.zhardem.services.impl;
 import com.app.zhardem.dto.PaymentTotal;
 import com.app.zhardem.dto.appointments.AppointmentsRequestDto;
 import com.app.zhardem.dto.appointments.AppointmentsResponseDto;
+import com.app.zhardem.dto.appointments.ScheduledDto;
 import com.app.zhardem.enums.Status;
 import com.app.zhardem.exceptions.entity.EntityNotFoundException;
 import com.app.zhardem.models.Appointments;
 import com.app.zhardem.models.Doctor;
-import com.app.zhardem.models.Payment;
 import com.app.zhardem.models.User;
 import com.app.zhardem.repositories.AppointmentsRepository;
 import com.app.zhardem.repositories.DoctorRepository;
@@ -57,6 +57,26 @@ public class AppointmentsServiceImpl implements AppointmentsService {
         }
 
         return availableTimeSlots;
+    }
+
+    @Override
+    public List<ScheduledDto> getScheduled() {
+        List<Appointments> appointments = appointmentsRepository.getAll();
+
+        List<ScheduledDto> responseDto = new ArrayList<>();
+        for(Appointments appointments1 : appointments){
+            ScheduledDto scheduledDto = ScheduledDto.builder()
+                    .status(appointments1.getStatus())
+                    .date(appointments1.getDate())
+                    .specialization(appointments1.getDoctor().getSpecialization())
+                    .fullName(appointments1.getDoctor().getFullName())
+                    .avatarPath(appointments1.getDoctor().getAvatarPath())
+                    .time(appointments1.getTime())
+                    .build();
+
+            responseDto.add(scheduledDto);
+        }
+        return responseDto;
     }
 
 

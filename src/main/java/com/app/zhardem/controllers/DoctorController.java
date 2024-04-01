@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -31,6 +32,12 @@ public class DoctorController {
     @ResponseStatus(HttpStatus.CREATED)
     public DoctorResponseDto createDoctor(@RequestBody @Valid DoctorRequestDto requestDto) {
         return doctorService.create(requestDto);
+    }
+
+    @PostMapping("/createWithAvatar")
+    @ResponseStatus(HttpStatus.CREATED)
+    public DoctorResponseDto createDoctorWithAvatar(@RequestBody @Valid DoctorRequestDto requestDto) throws IOException {
+        return doctorService.createWithAvatar(requestDto);
     }
 
     @PutMapping("/{id}")

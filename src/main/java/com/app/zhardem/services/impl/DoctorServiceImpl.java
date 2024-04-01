@@ -12,11 +12,13 @@ import com.app.zhardem.repositories.CategoryRepository;
 import com.app.zhardem.repositories.DoctorRepository;
 import com.app.zhardem.services.CategoryService;
 import com.app.zhardem.services.DoctorService;
+import com.app.zhardem.services.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final DoctorRepository doctorRepository;
     private final CategoryRepository categoryRepository;
     private final CategoryService categoryService;
+    private final FileService fileService;
 
     @Override
     public DoctorResponseDto getById(long id) {
@@ -43,10 +46,10 @@ public class DoctorServiceImpl implements DoctorService {
         return responseDto;
     }
 
+
     @Override
     public DoctorResponseDto create(DoctorRequestDto requestDto) {
        throwExceptionIfDoctorExists(requestDto.fullName());
-
         Doctor doctor = Doctor.builder()
                 .aboutText(requestDto.aboutText())
                 .distance(requestDto.distance())
@@ -113,6 +116,31 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
         return responses;
+    }
+
+    @Override
+    public DoctorResponseDto createWithAvatar(DoctorRequestDto requestDto) throws IOException {
+
+        String fileName = fileService.uploadFile(requestDto.file());
+        Doctor doctor = Doctor.builder()
+                .aboutText(requestDto.aboutText())
+                .distance(requestDto.distance())
+                .fullName(requestDto.fullName())
+                .specialization(requestDto.specialization())
+                .priceOfDoctor(requestDto.priceOfDoctor())
+                .build();
+
+        doctorRepository.save(doctor);
+        DoctorResponseDto responseDto = DoctorResponseDto.builder()
+                .avatarPath(doctor.getAvatarPath())
+                .about(doctor.getAboutText())
+                .fullName(doctor.getFullName())
+                .distance(doctor.getDistance())
+                .rating(doctor.getAverageRating())
+                .avatarPath(fileName)
+                .build();
+
+        return responseDto;
     }
 
 }

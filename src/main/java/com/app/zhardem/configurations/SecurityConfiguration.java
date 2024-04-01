@@ -3,6 +3,7 @@ package com.app.zhardem.configurations;
 
 import com.app.zhardem.configurations.security.filters.ExceptionHandlerFilter;
 import com.app.zhardem.configurations.security.filters.JwtAuthenticationFilter;
+import com.app.zhardem.repositories.UserRepository;
 import com.app.zhardem.services.impl.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,10 +13,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Configuration
@@ -24,11 +28,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final AuthenticationProvider authenticationProvider;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final ClientRegistrationRepository clientRegistrationRepository;
-    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,14 +44,13 @@ public class SecurityConfiguration {
                         .requestMatchers("/oauth2/authorization/google").permitAll()
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
                 .oauth2Login(oauth2 -> oauth2
                         .clientRegistrationRepository(clientRegistrationRepository)
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)
+                        .userInfoEndpoint(userInfo -> userInfo.userService(oauthUserService())
                         )
-
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
@@ -58,5 +62,8 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-
+    @Bean
+    public OAuth2UserService<org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest, org.springframework.security.oauth2.core.user.OAuth2User> oauthUserService(){
+        return new CustomOAuth2UserService(userRepository, passwordEncoder);
+    }
 }

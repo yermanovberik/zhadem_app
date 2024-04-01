@@ -1,6 +1,7 @@
 package com.app.zhardem.controllers;
 
 import com.app.zhardem.dto.appointments.AppointmentsResponseDto;
+import com.app.zhardem.dto.appointments.ScheduledDto;
 import com.app.zhardem.exceptions.entity.EntityNotFoundException;
 import com.app.zhardem.models.Appointments;
 import com.app.zhardem.services.AppointmentsService;
@@ -66,6 +67,11 @@ public class AppointmentsController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/scheduled")
+    public List<ScheduledDto> getScheduled(){
+        return appointmentsService.getScheduled();
     }
 
 
