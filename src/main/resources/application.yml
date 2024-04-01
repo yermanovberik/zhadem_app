@@ -26,7 +26,7 @@ spring:
               - phone
             client-id: 609756543286-sm69ucl3n8m36ri8motg0odu0q1dpinq.apps.googleusercontent.com
             client-secret: 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
-            redirect-uri: http://localhost:8080/api/v1/auth/oauth
+            redirect-uri: https://sea-lion-app-usoaj.ondigitalocean.app/api/v1/auth/oauth
             clientName: "Google"
 
   datasource:
