@@ -1,6 +1,9 @@
 stages:
   - build
+  - test
   - push
+  - deploy
+  - unit_tests
 
 variables:
   DOCKER_IMAGE_NAME: yermanov/appzhardem
@@ -16,3 +19,21 @@ build:
   script:
     - docker build -t appzhardem-app:latest .
     - docker push appzhardem-app:latest
+
+test:
+  stage: test
+  script:
+    - echo "Running tests here..."
+
+push:
+  stage: push
+  script:
+    - echo "Pushing to registry here..."
+
+deploy_digitalocean:
+  stage: deploy
+  image: alpine
+  before_script:
+    - apk add --update --no-cache curl
+  script:
+    - echo "Deploying to DigitalOcean..."

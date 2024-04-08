@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - ApplicationTests</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>ApplicationTests</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.app.zhardem.html">com.app.zhardem</a> &gt; ApplicationTests</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.394s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">contextLoads()</td>
+<td class="success">0.394s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>00:48:40.669 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.app.zhardem.ApplicationTests]: ApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+00:48:40.726 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.app.zhardem.Application for test class com.app.zhardem.ApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.2)
+
+2024-03-28T00:48:40.960+06:00  INFO 15129 --- [    Test worker] com.app.zhardem.ApplicationTests         : Starting ApplicationTests using Java 20.0.2 with PID 15129 (started by berikyerman in /Users/berikyerman/Downloads/app.zhardem)
+2024-03-28T00:48:40.961+06:00  INFO 15129 --- [    Test worker] com.app.zhardem.ApplicationTests         : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2024-03-28T00:48:41.439+06:00  INFO 15129 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-28T00:48:41.480+06:00  INFO 15129 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 38 ms. Found 7 JPA repository interfaces.
+2024-03-28T00:48:41.730+06:00  INFO 15129 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-03-28T00:48:44.275+06:00  INFO 15129 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@79f1e22e
+2024-03-28T00:48:44.277+06:00  INFO 15129 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-03-28T00:48:44.579+06:00  INFO 15129 --- [    Test worker] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2024-03-28T00:48:44.579+06:00  INFO 15129 --- [    Test worker] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2024-03-28T00:48:44.579+06:00  INFO 15129 --- [    Test worker] o.f.c.internal.license.VersionPrinter    : 
+2024-03-28T00:48:44.833+06:00  INFO 15129 --- [    Test worker] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://dpg-co1g9mect0pc73dbtrrg-a.oregon-postgres.render.com/zhardem_db_6tld (PostgreSQL 16.2)
+2024-03-28T00:48:46.560+06:00  WARN 15129 --- [    Test worker] o.f.c.internal.database.base.Database    : Flyway upgrade recommended: PostgreSQL 16.2 is newer than this version of Flyway and support has not been tested. The latest supported version of PostgreSQL is 15.
+2024-03-28T00:48:47.810+06:00  INFO 15129 --- [    Test worker] o.f.core.internal.command.DbValidate     : Successfully validated 0 migrations (execution time 00:00.989s)
+2024-03-28T00:48:47.810+06:00  WARN 15129 --- [    Test worker] o.f.core.internal.command.DbValidate     : No migrations found. Are your locations set up correctly?
+2024-03-28T00:48:50.787+06:00  INFO 15129 --- [    Test worker] o.f.core.internal.command.DbMigrate      : Current version of schema &quot;public&quot;: &lt;&lt; Empty Schema &gt;&gt;
+2024-03-28T00:48:51.039+06:00  INFO 15129 --- [    Test worker] o.f.core.internal.command.DbMigrate      : Schema &quot;public&quot; is up to date. No migration necessary.
+2024-03-28T00:48:52.612+06:00  INFO 15129 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-28T00:48:52.647+06:00  INFO 15129 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2024-03-28T00:48:52.665+06:00  INFO 15129 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-03-28T00:48:52.791+06:00  INFO 15129 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-03-28T00:48:54.959+06:00  INFO 15129 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-03-28T00:49:01.818+06:00  INFO 15129 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-28T00:49:02.218+06:00  INFO 15129 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-03-28T00:49:02.863+06:00  WARN 15129 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-28T00:49:03.051+06:00  INFO 15129 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4dac863d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@503308de, org.springframework.security.web.context.SecurityContextHolderFilter@410ca583, org.springframework.security.web.header.HeaderWriterFilter@57c089ac, org.springframework.web.filter.CorsFilter@482bdb02, org.springframework.security.web.authentication.logout.LogoutFilter@9a4bb97, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@1b6c8641, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@5a885113, com.app.zhardem.configurations.security.filters.ExceptionHandlerFilter@7aff1db3, com.app.zhardem.configurations.security.filters.JwtAuthenticationFilter@51bd10f0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@30100995, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@70225ba5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@ac64dd0, org.springframework.security.web.session.SessionManagementFilter@632e4d5d, org.springframework.security.web.access.ExceptionTranslationFilter@4c7e7855, org.springframework.security.web.access.intercept.AuthorizationFilter@70141128]
+2024-03-28T00:49:03.306+06:00  INFO 15129 --- [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-03-28T00:49:03.307+06:00  INFO 15129 --- [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5f936aad]]
+2024-03-28T00:49:03.308+06:00  INFO 15129 --- [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-03-28T00:49:03.314+06:00  INFO 15129 --- [    Test worker] com.app.zhardem.ApplicationTests         : Started ApplicationTests in 22.499 seconds (process running for 23.368)
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.5</a> at Mar 28, 2024, 12:49:06 AM</p>
+</div>
+</div>
+</body>
+</html>

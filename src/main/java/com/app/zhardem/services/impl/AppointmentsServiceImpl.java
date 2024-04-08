@@ -60,6 +60,21 @@ public class AppointmentsServiceImpl implements AppointmentsService {
     }
 
     @Override
+    public String handleBooking(Long doctorId, Long userId, Long appointmentId) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new EntityNotFoundException("Doctor with id " + doctorId  +" not found!"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId  +" not found!"));
+
+        Appointments appointments = appointmentsRepository.findById(appointmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Appoiments with id " + appointmentId + " not found!"));
+
+        appointments.setStatus(Status.CONFIRMED);
+        return "success";
+    }
+
+    @Override
     public List<ScheduledDto> getScheduled() {
         List<Appointments> appointments = appointmentsRepository.getAll();
 

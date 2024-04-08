@@ -22,6 +22,13 @@ import java.util.List;
 public class AppointmentsController {
     private final AppointmentsService appointmentsService;
 
+    @GetMapping("/{doctorId}/{userId}/{appointmentId}")
+    public String handleBooking(@PathVariable("doctorId") Long doctorId,
+                                @PathVariable("userId") Long userId,
+                                @PathVariable("appointmentId") Long appointmentId) {
+
+        return appointmentsService.handleBooking(doctorId, userId, appointmentId);
+    }
     @GetMapping("/doctor/{doctorId}/availability")
     public ResponseEntity<List<AppointmentsResponseDto>> getDoctorAvailability(@PathVariable Long doctorId, @RequestParam int dayNumber) {
         List<AppointmentsResponseDto> availableTimes = appointmentsService.getDoctorAvailability(doctorId, dayNumber);

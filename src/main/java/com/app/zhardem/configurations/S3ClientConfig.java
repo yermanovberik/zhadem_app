@@ -26,6 +26,7 @@ public class S3ClientConfig {
                 .withRegion(Regions.EU_WEST_1)
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .build();
+
     }
 
 }

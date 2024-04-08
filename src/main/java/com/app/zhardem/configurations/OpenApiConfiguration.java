@@ -2,6 +2,7 @@ package com.app.zhardem.configurations;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
@@ -20,34 +21,20 @@ public class OpenApiConfiguration {
 
     @Bean
     public OpenAPI openApi() {
-        return new OpenAPI()
-                .addSecurityItem(
-                        new SecurityRequirement()
-                                .addList("bearerAuth")
-                )
-                .components(
-                        new Components()
-                                .addSecuritySchemes(
-                                        "bearerAuth",
-                                        new SecurityScheme()
-                                                .type(SecurityScheme.Type.HTTP)
-                                                .scheme("bearer")
-                                                .bearerFormat("JWT")
-                                )
-                )
-                .servers(
-                        List.of(
-                                new Server()
-                                        .description("local")
-                                        .url("http://localhost:" + serverPort)
-                        )
-                )
-                .info(
-                        new Info()
-                                .title("Zhardem platform")
-                                .description("A platform for conducting team Olympiads on computer networks")
-                                .version("1.0.0")
-                );
+        Server server = new Server();
+        server.setUrl("http://localhost:8080");
+        server.setDescription("Development");
+
+        Contact myContact = new Contact();
+        myContact.setName("Asylzat A");
+        myContact.setEmail("zhardemapp@gmail.com");
+
+        Info information = new Info()
+                .title("Zhardem Medical App")
+                .version("1.0")
+                .description("This API exposes endpoints to manage employees.")
+                .contact(myContact);
+        return new OpenAPI().info(information).servers(List.of(server));
     }
 
 }

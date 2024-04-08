@@ -11,7 +11,6 @@ public record ArticleRequestDto(
         String title,
         String author,
         LocalDateTime publicationDate,
-        String category,
         String tags,
         MultipartFile file
 ) {}
