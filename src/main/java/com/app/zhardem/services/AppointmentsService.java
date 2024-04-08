@@ -8,6 +8,7 @@ import com.app.zhardem.exceptions.entity.EntityNotFoundException;
 import com.app.zhardem.models.Appointments;
 import com.app.zhardem.models.Doctor;
 import com.app.zhardem.models.User;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +19,7 @@ public interface AppointmentsService extends CrudService<Appointments, Appointme
 
     List<AppointmentsResponseDto> getDoctorAvailability(Long doctorId, int dayNumber);
 
+    String handleBooking(Long doctorId, Long userId, Long appointmentId);
     List<ScheduledDto> getScheduled();
 
     boolean bookAppointment(Long doctorId, LocalDateTime dateTime, Long userId);

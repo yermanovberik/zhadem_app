@@ -1,0 +1,50 @@
+{
+  "groups": [
+    {
+      "name": "application.security.jwt",
+      "type": "com.app.zhardem.configurations.properties.JwtProperties",
+      "sourceType": "com.app.zhardem.configurations.properties.JwtProperties"
+    },
+    {
+      "name": "aws",
+      "type": "com.app.zhardem.configurations.properties.S3Properties",
+      "sourceType": "com.app.zhardem.configurations.properties.S3Properties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "application.security.jwt.access-token-expiration",
+      "type": "java.lang.Long",
+      "sourceType": "com.app.zhardem.configurations.properties.JwtProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "application.security.jwt.refresh-token-expiration",
+      "type": "java.lang.Long",
+      "sourceType": "com.app.zhardem.configurations.properties.JwtProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "application.security.jwt.secret-key",
+      "type": "java.lang.String",
+      "description": "Description for application.security.jwt.secret-key.",
+      "sourceType": "com.app.zhardem.configurations.properties.JwtProperties"
+    },
+    {
+      "name": "aws.access-key",
+      "type": "java.lang.String",
+      "sourceType": "com.app.zhardem.configurations.properties.S3Properties"
+    },
+    {
+      "name": "aws.secret-key",
+      "type": "java.lang.String",
+      "sourceType": "com.app.zhardem.configurations.properties.S3Properties"
+    },
+    {
+      "name": "minio.bucket-name",
+      "type": "java.lang.String",
+      "description": "Description for minio.bucket-name."
+    }
+  ],
+  "hints": []
+}

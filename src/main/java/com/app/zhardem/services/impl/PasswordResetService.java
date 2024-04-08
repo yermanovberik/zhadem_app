@@ -1,5 +1,6 @@
 package com.app.zhardem.services.impl;
 
+import com.app.zhardem.dto.password.PasswordString;
 import com.app.zhardem.exceptions.entity.EntityNotFoundException;
 import com.app.zhardem.models.User;
 import com.app.zhardem.repositories.UserRepository;
@@ -31,7 +32,7 @@ public class PasswordResetService {
 
         emailService.sendEmailWithCode(email, code);
     }
-    public String forgotYourPassword(String email) {
+    public PasswordString forgotYourPassword(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found"));
 
@@ -39,7 +40,9 @@ public class PasswordResetService {
         user.setResetToken(resetToken);
         user.setResetTokenExpiration(LocalDateTime.now().plusHours(1));
         userRepository.save(user);
-        return resetToken;
+        PasswordString passwordString = PasswordString.builder()
+                .email(resetToken).build();
+        return passwordString;
     }
 
 

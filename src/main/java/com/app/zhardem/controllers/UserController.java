@@ -1,5 +1,6 @@
 package com.app.zhardem.controllers;
 
+import com.app.zhardem.dto.password.PasswordString;
 import com.app.zhardem.dto.user.*;
 import com.app.zhardem.services.UserService;
 import com.app.zhardem.services.impl.PasswordResetService;
@@ -76,7 +77,7 @@ public class UserController {
     @PostMapping("/request-reset")
     public ResponseEntity<?> requestPasswordReset(@RequestParam String email) {
         passwordResetService.sendResetCode(email);
-        String resetToken = passwordResetService.forgotYourPassword(email);
+        PasswordString resetToken = passwordResetService.forgotYourPassword(email);
         return ResponseEntity.ok(resetToken);
     }
 
