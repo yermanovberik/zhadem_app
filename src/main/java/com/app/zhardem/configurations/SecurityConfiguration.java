@@ -42,8 +42,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/payment/create", "/api/v1/password/**").permitAll()
                         .requestMatchers("/oauth2/authorization/google").permitAll()
-                        .requestMatchers("").hasRole("ADMIN")
-                        .requestMatchers("").hasRole("DOCTOR")
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
