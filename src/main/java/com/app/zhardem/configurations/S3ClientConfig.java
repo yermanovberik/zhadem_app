@@ -8,8 +8,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.app.zhardem.configurations.properties.S3Properties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,7 +24,6 @@ public class S3ClientConfig {
                 .withRegion(Regions.EU_WEST_1)
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .build();
-
     }
 
 }

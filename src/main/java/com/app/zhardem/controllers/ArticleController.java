@@ -53,7 +53,8 @@ public class ArticleController {
             @RequestPart("author") String author,
             @RequestPart("publicationDate") String publicationDate,
             @RequestPart("tags") String tags,
-            @RequestPart("file") MultipartFile file) {
+            @RequestPart("file") MultipartFile file
+    ) {
         try {
             ArticleRequestDto requestDto = ArticleRequestDto.builder()
                     .publicationDate(LocalDateTime.parse(publicationDate))
