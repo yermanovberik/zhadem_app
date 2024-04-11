@@ -15,4 +15,6 @@ public interface DoctorService extends CrudService<Doctor, DoctorRequestDto, Doc
 
          DoctorResponseDto createWithAvatar(DoctorRequestDto requestDto) throws IOException;
 
+         List<DoctorResponseDto> getRecentDoctors();
+
 }

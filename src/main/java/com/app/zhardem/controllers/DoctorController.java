@@ -7,8 +7,10 @@ import com.app.zhardem.services.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,17 +30,39 @@ public class DoctorController {
         return doctorService.getById(id);
     }
 
+    @GetMapping("/getRecentDoctors")
+    public List<DoctorResponseDto> getRecentDoctors(){
+        return doctorService.getRecentDoctors();
+    }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public DoctorResponseDto createDoctor(@RequestBody @Valid DoctorRequestDto requestDto) {
         return doctorService.create(requestDto);
     }
 
-    @PostMapping("/createWithAvatar")
+    @PostMapping(value = "/createWithAvatar")
     @ResponseStatus(HttpStatus.CREATED)
-    public DoctorResponseDto createDoctorWithAvatar(@RequestBody @Valid DoctorRequestDto requestDto) throws IOException {
-        return doctorService.createWithAvatar(requestDto);
+    public DoctorResponseDto createDoctorWithAvatar(
+            @RequestParam("fullName") String fullName,
+            @RequestParam("distance") double distance,
+            @RequestParam("specialization") String specialization,
+            @RequestParam("aboutText") String aboutText,
+            @RequestParam("category") String category,
+            @RequestParam("priceOfDoctor") int priceOfDoctor,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        DoctorRequestDto doctorRequestDto = DoctorRequestDto.builder()
+                .fullName(fullName)
+                .priceOfDoctor(priceOfDoctor)
+                .specialization(specialization)
+                .distance(distance)
+                .aboutText(aboutText)
+                .category(category)
+                .file(file)
+                .build();
+        return doctorService.createWithAvatar(doctorRequestDto);
     }
+
 
     @PutMapping("/{id}")
     public DoctorResponseDto updateDoctor(@PathVariable long id, @RequestBody @Valid DoctorRequestDto requestDto) {

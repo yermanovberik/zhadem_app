@@ -126,12 +126,15 @@ public class DoctorServiceImpl implements DoctorService {
                 .aboutText(requestDto.aboutText())
                 .distance(requestDto.distance())
                 .fullName(requestDto.fullName())
+                .avatarPath(fileName)
                 .specialization(requestDto.specialization())
                 .priceOfDoctor(requestDto.priceOfDoctor())
                 .build();
 
         doctorRepository.save(doctor);
+        log.info("File is " + fileName);
         DoctorResponseDto responseDto = DoctorResponseDto.builder()
+                .id(doctor.getId())
                 .avatarPath(doctor.getAvatarPath())
                 .about(doctor.getAboutText())
                 .fullName(doctor.getFullName())
@@ -141,6 +144,25 @@ public class DoctorServiceImpl implements DoctorService {
                 .build();
 
         return responseDto;
+    }
+
+    @Override
+    public List<DoctorResponseDto> getRecentDoctors() {
+        List<Doctor> allDoctors = doctorRepository.findAll();
+        List<DoctorResponseDto> getRecentDoctors = new ArrayList<>();
+        for(Doctor doctor : allDoctors){
+            DoctorResponseDto doctorResponseDto = DoctorResponseDto.builder()
+                    .id(doctor.getId())
+                    .avatarPath(doctor.getAvatarPath())
+                    .rating(doctor.getAverageRating())
+                    .fullName(doctor.getFullName())
+                    .category(doctor.getSpecialization())
+                    .avatarPath(doctor.getAvatarPath())
+                    .build();
+            log.info("Avatar path is " + doctor.getAvatarPath());
+            getRecentDoctors.add(doctorResponseDto);
+        }
+        return getRecentDoctors;
     }
 
 }
