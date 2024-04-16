@@ -20,7 +20,7 @@ public interface AppointmentsService extends CrudService<Appointments, Appointme
     List<AppointmentsResponseDto> getDoctorAvailability(Long doctorId, int dayNumber);
 
     String handleBooking(Long doctorId, Long userId, Long appointmentId);
-    List<ScheduledDto> getScheduled();
+    List<ScheduledDto> getScheduled(Long userId);
 
     boolean bookAppointment(Long doctorId, LocalDateTime dateTime, Long userId);
 

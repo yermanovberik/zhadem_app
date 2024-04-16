@@ -26,7 +26,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -61,6 +60,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
 
     @Override
     public String handleBooking(Long doctorId, Long userId, Long appointmentId) {
+
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new EntityNotFoundException("Doctor with id " + doctorId  +" not found!"));
 
@@ -75,8 +75,11 @@ public class AppointmentsServiceImpl implements AppointmentsService {
     }
 
     @Override
-    public List<ScheduledDto> getScheduled() {
-        List<Appointments> appointments = appointmentsRepository.getAll();
+    public List<ScheduledDto> getScheduled(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with this id " + userId + " not found!"));
+
+        List<Appointments> appointments = appointmentsRepository.findByUser(user);
 
         List<ScheduledDto> responseDto = new ArrayList<>();
         for(Appointments appointments1 : appointments){
