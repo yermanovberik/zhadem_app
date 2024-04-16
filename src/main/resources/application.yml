@@ -41,11 +41,16 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: update
+    open-in-view: true
 
 springdoc:
   swagger-ui:
     operations-sorter: method
   override-with-generic-response: true
+snapadmin:
+  enabled: true
+  baseUrl: admin
+  modelsPackage: com.app.zhardem.models,your.second.models.package
 
 aws:
   accessKey: AKIAYURL6RHVHNNB72VR

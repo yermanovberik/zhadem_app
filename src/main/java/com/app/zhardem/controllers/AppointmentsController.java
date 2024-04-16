@@ -76,9 +76,9 @@ public class AppointmentsController {
         }
     }
 
-    @GetMapping("/scheduled")
-    public List<ScheduledDto> getScheduled(){
-        return appointmentsService.getScheduled();
+    @GetMapping("/scheduled/{userId}")
+    public List<ScheduledDto> getScheduled(@PathVariable("userId") Long userId){
+        return appointmentsService.getScheduled(userId);
     }
 
 

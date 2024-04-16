@@ -20,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @Slf4j
@@ -36,15 +38,18 @@ public class StripeService {
 
     public StripeResponses createPayment(CreatePaymentRequest createPaymentRequest) {
         Stripe.apiKey = "sk_test_51NvFT9DMd4BkEMbZ6ui5Cm5kCG7PVY07WleHTmmvOXmydkZsYLne6YrjiJqjIjVFZyYiYBzPvApOw5mrR4SkIs3i00Oo9ETQ5L";
-        Appointments appointments = appointmentsRepository.findById(createPaymentRequest.getAppointmentID())
-                .orElseThrow(() -> new EntityNotFoundException("Appoinment with id " + createPaymentRequest.getAppointmentID() + " not found!"));
+
+        User user = userRepository.findById(createPaymentRequest.getUserID())
+                .orElseThrow(() -> new EntityNotFoundException("User with this id " + createPaymentRequest.getUserID() + " not found!"));
 
         Doctor doctor = doctorRepository.findById(createPaymentRequest.getDoctorID())
                 .orElseThrow(() -> new EntityNotFoundException("Doctor with this id " + createPaymentRequest.getDoctorID() + " not found!"));
 
-        User user = userRepository.findById(createPaymentRequest.getUserID())
-                .orElseThrow(() -> new EntityNotFoundException("User with this id " + createPaymentRequest.getUserID() + " not fonud!"));
-
+        List<Appointments> appointmentsList = appointmentsRepository.findAppointmentsByUserAndDoctorAndDay(user.getId(), doctor.getId(), createPaymentRequest.getDayNumber());
+        if (appointmentsList.isEmpty()) {
+            throw new EntityNotFoundException("Appointment on day " + createPaymentRequest.getDayNumber() + " not found!");
+        }
+        Appointments appointments = appointmentsList.get(0);
         String name = doctor.getFullName() + " doctor is booking for the date " + appointments.getDate() + " on time " + appointments.getTime();
         SessionCreateParams.LineItem.PriceData.ProductData productData =
                 SessionCreateParams.LineItem.PriceData.ProductData.builder()
@@ -68,10 +73,11 @@ public class StripeService {
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setSuccessUrl("http://localhost:8080/api/v1/booking"+"/"+createPaymentRequest.getDoctorID()+"/"+createPaymentRequest.getUserID()+"/"+createPaymentRequest.getAppointmentID())
+                        .setSuccessUrl("http://localhost:8080/api/v1/booking" + "/" + createPaymentRequest.getDoctorID() + "/" + createPaymentRequest.getUserID()) // Remove the semicolon here
                         .setCancelUrl("http://localhost:8080/cancel")
                         .addLineItem(lineItem)
                         .build();
+
         Session session;
         try {
             session = Session.create(params);
@@ -114,7 +120,7 @@ public class StripeService {
             return stripeResponses;
         } catch (StripeException e) {
             e.printStackTrace();
-            StripeResponses stripeResponses = new StripeResponses("FAilure","Payment capture failed due to a server error.",500,null);
+            StripeResponses stripeResponses = new StripeResponses("Failure","Payment capture failed due to a server error.",500,null);
             return stripeResponses;
         }
     }

@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CreatePaymentRequest {
-    private Long appointmentID;
-    private Long doctorID;
     private Long userID;
+    private Long doctorID;
+    private int dayNumber;
 }
