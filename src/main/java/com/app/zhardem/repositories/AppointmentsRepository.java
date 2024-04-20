@@ -23,9 +23,10 @@ public interface AppointmentsRepository extends JpaRepository<Appointments, Long
     @Query("SELECT a FROM Appointments a")
     List<Appointments> getAll();
 
-    @Query("SELECT a FROM Appointments a WHERE a.user.id = :userId AND a.doctor.id = :doctorId AND FUNCTION('DAY', a.date) = :dayNumber")
+    @Query("SELECT a FROM Appointments a WHERE a.user.id = :userId AND a.doctor.id = :doctorId AND EXTRACT(DAY FROM a.date) = :dayNumber")
     List<Appointments> findAppointmentsByUserAndDoctorAndDay(
             @Param("userId") Long userId,
             @Param("doctorId") Long doctorId,
             @Param("dayNumber") int dayNumber);
+
 }
