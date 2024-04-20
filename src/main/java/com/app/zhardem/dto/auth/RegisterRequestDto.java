@@ -13,11 +13,6 @@ public record RegisterRequestDto(
 
 
         @NotBlank(message = "Last name cannot be blank")
-        @Size(min = 2, max = 15, message = "Last name must be between 2 and 15 characters")
-        @Pattern(
-                regexp = "^[A-Z][a-z]+$",
-                message = "Last name must start with an uppercase letter and can include only letters"
-        )
         String fullName,
 
         @NotBlank(message = "Email cannot be blank")

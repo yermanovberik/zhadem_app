@@ -59,7 +59,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
     }
 
     @Override
-    public String handleBooking(Long doctorId, Long userId, Long appointmentId) {
+    public String handleBooking(Long doctorId, Long userId,LocalDateTime dayNumber) {
 
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new EntityNotFoundException("Doctor with id " + doctorId  +" not found!"));
@@ -67,10 +67,14 @@ public class AppointmentsServiceImpl implements AppointmentsService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + userId  +" not found!"));
 
-        Appointments appointments = appointmentsRepository.findById(appointmentId)
-                .orElseThrow(() -> new EntityNotFoundException("Appoiments with id " + appointmentId + " not found!"));
+        int day = dayNumber.getDayOfMonth();
+        List<Appointments> appointments = appointmentsRepository.findAppointmentsByUserAndDoctorAndDay(user.getId(), doctor.getId(), day);
 
-        appointments.setStatus(Status.CONFIRMED);
+        if (appointments.isEmpty()) {
+            throw new EntityNotFoundException("Appointment on day " + dayNumber+ " not found!");
+        }
+        Appointments appointments1 = appointments.get(0);
+        appointments1.setStatus(Status.CONFIRMED);
         return "success";
     }
 

@@ -25,9 +25,9 @@ public class AppointmentsController {
     @GetMapping("/{doctorId}/{userId}/{appointmentId}")
     public String handleBooking(@PathVariable("doctorId") Long doctorId,
                                 @PathVariable("userId") Long userId,
-                                @PathVariable("appointmentId") Long appointmentId) {
+                                @PathVariable("dayNumber") LocalDateTime dayNumber) {
 
-        return appointmentsService.handleBooking(doctorId, userId, appointmentId);
+        return appointmentsService.handleBooking(doctorId, userId, dayNumber);
     }
     @GetMapping("/doctor/{doctorId}/availability")
     public ResponseEntity<List<AppointmentsResponseDto>> getDoctorAvailability(@PathVariable Long doctorId, @RequestParam int dayNumber) {

