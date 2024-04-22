@@ -129,6 +129,10 @@ public class AppointmentsServiceImpl implements AppointmentsService {
         AppointmentsPaymentDto paymentDto = AppointmentsPaymentDto.builder()
                 .text("Appointment booked successfully.")
                 .id(appointment.getId())
+                .amountPaid(appointment.getAmountPaid())
+                .doctorId(appointment.getDoctor().getId())
+                .time(appointment.getTime())
+                .date(appointment.getDate())
                 .build();
         return paymentDto;
     }
