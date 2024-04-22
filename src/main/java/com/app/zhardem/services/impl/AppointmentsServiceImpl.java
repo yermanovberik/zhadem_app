@@ -133,6 +133,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
                 .doctorId(appointment.getDoctor().getId())
                 .time(appointment.getTime())
                 .date(appointment.getDate())
+                .userId(appointment.getUser().getId())
                 .build();
         return paymentDto;
     }
