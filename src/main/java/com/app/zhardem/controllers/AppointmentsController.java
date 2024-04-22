@@ -1,5 +1,6 @@
 package com.app.zhardem.controllers;
 
+import com.app.zhardem.dto.appointments.AppointmentsPaymentDto;
 import com.app.zhardem.dto.appointments.AppointmentsResponseDto;
 import com.app.zhardem.dto.appointments.ScheduledDto;
 import com.app.zhardem.exceptions.entity.EntityNotFoundException;
@@ -37,13 +38,11 @@ public class AppointmentsController {
     }
 
     @PostMapping("/book")
-    public ResponseEntity<Object> bookAppointment(@RequestParam Long doctorId, @RequestParam LocalDateTime dateTime, @RequestParam Long userId) {
-        try {
-            appointmentsService.bookAppointment(doctorId, dateTime, userId);
-            return ResponseEntity.ok().body(Map.of("message", "Appointment booked successfully."));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
+    public AppointmentsPaymentDto bookAppointment(@RequestParam Long doctorId, @RequestParam LocalDateTime dateTime, @RequestParam Long userId) {
+
+        AppointmentsPaymentDto paymentDto = appointmentsService.bookAppointment(doctorId, dateTime, userId);
+        return paymentDto;
+
     }
 
     @PostMapping("/bookOrUpdate")
