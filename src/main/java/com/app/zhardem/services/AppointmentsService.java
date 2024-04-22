@@ -1,5 +1,6 @@
 package com.app.zhardem.services;
 
+import com.app.zhardem.dto.appointments.AppointmentsPaymentDto;
 import com.app.zhardem.dto.appointments.AppointmentsRequestDto;
 import com.app.zhardem.dto.appointments.AppointmentsResponseDto;
 import com.app.zhardem.dto.appointments.ScheduledDto;
@@ -22,7 +23,7 @@ public interface AppointmentsService extends CrudService<Appointments, Appointme
     String handleBooking(Long doctorId, Long userId,LocalDateTime dayNumber);
     List<ScheduledDto> getScheduled(Long userId);
 
-    boolean bookAppointment(Long doctorId, LocalDateTime dateTime, Long userId);
+    AppointmentsPaymentDto bookAppointment(Long doctorId, LocalDateTime dateTime, Long userId);
 
     boolean cancelAppointment(Long appointmentId);
 

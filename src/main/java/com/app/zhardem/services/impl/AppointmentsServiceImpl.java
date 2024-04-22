@@ -1,6 +1,7 @@
 package com.app.zhardem.services.impl;
 
 import com.app.zhardem.dto.PaymentTotal;
+import com.app.zhardem.dto.appointments.AppointmentsPaymentDto;
 import com.app.zhardem.dto.appointments.AppointmentsRequestDto;
 import com.app.zhardem.dto.appointments.AppointmentsResponseDto;
 import com.app.zhardem.dto.appointments.ScheduledDto;
@@ -102,7 +103,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
     }
 
 
-    public boolean bookAppointment(Long doctorId, LocalDateTime dateTime, Long userId) {
+    public AppointmentsPaymentDto bookAppointment(Long doctorId, LocalDateTime dateTime, Long userId) {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new EntityNotFoundException("Doctor with id " + doctorId  +" not found!"));
 
@@ -124,7 +125,16 @@ public class AppointmentsServiceImpl implements AppointmentsService {
         log.info("Price of doctor "+ doctor.getPriceOfDoctor());
         appointment.setUser(user);
         appointmentsRepository.save(appointment);
-        return true;
+
+        AppointmentsPaymentDto paymentDto = AppointmentsPaymentDto.builder()
+                .text("Appointment booked successfully.")
+                .id(appointment.getId())
+                .amountPaid(appointment.getAmountPaid())
+                .doctorId(appointment.getDoctor().getId())
+                .time(appointment.getTime())
+                .date(appointment.getDate())
+                .build();
+        return paymentDto;
     }
 
     public boolean bookOrUpdateAppointment(Long doctorId, LocalDateTime dateTime, Long userId) {
