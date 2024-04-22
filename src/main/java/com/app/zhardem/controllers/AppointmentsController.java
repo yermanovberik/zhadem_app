@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Validated
 @RestController
@@ -36,12 +37,12 @@ public class AppointmentsController {
     }
 
     @PostMapping("/book")
-    public ResponseEntity<String> bookAppointment(@RequestParam Long doctorId, @RequestParam LocalDateTime dateTime, @RequestParam Long userId) {
+    public ResponseEntity<Object> bookAppointment(@RequestParam Long doctorId, @RequestParam LocalDateTime dateTime, @RequestParam Long userId) {
         try {
             appointmentsService.bookAppointment(doctorId, dateTime, userId);
-            return ResponseEntity.ok("Appointment booked successfully.");
+            return ResponseEntity.ok().body(Map.of("message", "Appointment booked successfully."));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
