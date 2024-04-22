@@ -17,6 +17,7 @@ public record AppointmentsPaymentDto(
         Long doctorId,
         LocalDate date,
         LocalTime time,
-        long amountPaid
+        long amountPaid,
+        long userId
 ) {
 }
