@@ -134,6 +134,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
                 .time(appointment.getTime())
                 .date(appointment.getDate())
                 .userId(appointment.getUser().getId())
+
                 .build();
         return paymentDto;
     }

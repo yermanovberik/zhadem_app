@@ -74,8 +74,8 @@ public class StripeService {
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setSuccessUrl("http://localhost:8080/api/v1/booking/" + createPaymentRequest.getDoctorID() + "/" + createPaymentRequest.getUserID())
-                        .setCancelUrl("http://localhost:8080/cancel")
+                        .setSuccessUrl("http://localhost:3000/booking/")
+                        .setCancelUrl("http://localhost:3000/booking/")
                         .addLineItem(lineItem)
                         .build();
 

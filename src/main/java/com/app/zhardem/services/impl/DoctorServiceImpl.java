@@ -37,11 +37,13 @@ public class DoctorServiceImpl implements DoctorService {
         Doctor doctor = getEntityById(id);
 
         DoctorResponseDto responseDto = DoctorResponseDto.builder()
+                .id(doctor.getId())
                 .avatarPath(doctor.getAvatarPath())
                 .about(doctor.getAboutText())
                 .fullName(doctor.getFullName())
                 .distance(doctor.getDistance())
                 .rating(doctor.getAverageRating())
+                .specialization(doctor.getSpecialization())
                 .build();
         return responseDto;
     }
@@ -156,7 +158,7 @@ public class DoctorServiceImpl implements DoctorService {
                     .avatarPath(doctor.getAvatarPath())
                     .rating(doctor.getAverageRating())
                     .fullName(doctor.getFullName())
-                    .category(doctor.getSpecialization())
+                    .specialization(doctor.getSpecialization())
                     .avatarPath(doctor.getAvatarPath())
                     .build();
             log.info("Avatar path is " + doctor.getAvatarPath());

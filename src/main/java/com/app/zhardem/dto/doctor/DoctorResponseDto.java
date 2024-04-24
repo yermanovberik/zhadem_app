@@ -12,6 +12,6 @@ public record DoctorResponseDto(
         String about,
         String avatarPath,
 
-        String category
+        String specialization
 ) {
 }
