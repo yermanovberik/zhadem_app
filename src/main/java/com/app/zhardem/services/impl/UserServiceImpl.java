@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URL;
 import java.util.Map;
 
 
@@ -33,12 +34,11 @@ public class UserServiceImpl implements UserService {
         try {
 
             String fileName = fileService.uploadFile(file);
-
             User user = getEntityById(id);
             user.setAvatarPath(fileName);
             userRepository.save(user);
 
-            return new UserUploadPhotoDto(user.getId(), user.getFullName());
+            return new UserUploadPhotoDto(user.getId(), user.getAvatarPath());
         } catch (Exception e) {
             throw new RuntimeException("Failed to upload profile photo", e);
         }
@@ -68,10 +68,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
- 
-
-
-
     @Override
     public void throwExceptionIfUserExists(String email) {
         userRepository.findByEmail(email)
@@ -85,9 +81,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserAllInfo getAllInfo(long id) {
         User user = getEntityById(id);
-
+        String fileName = user.getAvatarPath();
+        URL presignedUrl = fileService.generatePresignedUrl(fileName, 60);
         UserAllInfo responseDto = UserAllInfo.builder()
-                .avatarPath(user.getAvatarPath())
+                .avatarPath(presignedUrl.toString())
                 .IIN(user.getIIN())
                 .sex(user.getSex())
                 .region(user.getRegion())
@@ -110,32 +107,6 @@ public class UserServiceImpl implements UserService {
                 .role(Role.USER)
                 .build();
 
-        return responseDto;
-    }
-
-    @Override
-    public UserResponseDto findOrCreateUser(String email,Map<String, Object> attributes) {
-        log.info("Finding or creating User with email: {}", email);
-
-        User user = userRepository.findByEmail(email)
-                .orElseGet(() -> {
-                    log.info("User with email: {} not found, creating a new one", email);
-                    User newUser = User.builder()
-                            .email(email)
-                            .fullName((String) attributes.get("name")) // Пример, зависит от структуры attributes
-                            .role(Role.USER) // Предполагаем, что Role - это enum в вашей модели User
-                            .build();
-                    return userRepository.save(newUser);
-                });
-
-        // Создаем UserResponseDto для ответа
-        UserResponseDto responseDto = UserResponseDto.builder()
-                .email(user.getEmail())
-                .role(user.getRole())
-                // Добавьте другие поля в ответ, если необходимо
-                .build();
-
-        log.info("User with email: {} processed", email);
         return responseDto;
     }
 

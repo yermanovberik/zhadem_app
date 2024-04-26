@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public record DoctopTopResponse(
         String fullName,
-        String imgaePath,
+        String imagePath,
         String specialization,
         double rating,
         double distance

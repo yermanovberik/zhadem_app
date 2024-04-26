@@ -35,13 +35,11 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String uploadFile(MultipartFile multipartFile) throws IOException {
-        // Проверка и создание временного файла
         File file = File.createTempFile("upload-", FilenameUtils.getExtension(multipartFile.getOriginalFilename()));
         try (FileOutputStream fileOutputStream = new FileOutputStream(file)){
             fileOutputStream.write(multipartFile.getBytes());
         }
 
-        // Генерация имени файла и метаданных для загрузки
         String fileName = generateFileName(multipartFile);
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(multipartFile.getContentType()); // Установка правильного MIME типа

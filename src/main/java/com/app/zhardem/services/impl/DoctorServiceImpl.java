@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,10 +36,11 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public DoctorResponseDto getById(long id) {
         Doctor doctor = getEntityById(id);
-
+        String fileName = doctor.getAvatarPath();
+        URL presignedUrl = fileService.generatePresignedUrl(fileName, 60);
         DoctorResponseDto responseDto = DoctorResponseDto.builder()
                 .id(doctor.getId())
-                .avatarPath(doctor.getAvatarPath())
+                .avatarPath(presignedUrl.toString())
                 .about(doctor.getAboutText())
                 .fullName(doctor.getFullName())
                 .distance(doctor.getDistance())
@@ -106,14 +108,15 @@ public class DoctorServiceImpl implements DoctorService {
 
         List<DoctopTopResponse> responses = new ArrayList<>();
         for(Object[] row : topDoctorsData){
+            String fileName =  (String) row[4];
+            URL presignedUrl = fileService.generatePresignedUrl(fileName, 60);
             DoctopTopResponse response = new DoctopTopResponse(
                     (String) row[1],
-                    (String) row[4],
+                    presignedUrl.toString(),
                     (String) row[2],
                     (Double) row[3],
                     (Double) row[5]
             );
-
             responses.add(response);
         }
 

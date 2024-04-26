@@ -20,6 +20,4 @@ public interface UserService extends CrudService<User, UserRequestDto, UserRespo
 
    UserAllInfo uploadFullInfo(long id,UserFullInfoDto responseDto);
 
-     UserResponseDto findOrCreateUser(String email,Map<String, Object> attributes);
-
 }
