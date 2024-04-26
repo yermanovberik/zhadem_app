@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/password")
+@RequestMapping("/api/v1/user")
 @Slf4j
 public class UserController {
     private final UserService userService;
