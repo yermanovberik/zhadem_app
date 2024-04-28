@@ -57,6 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         AuthenticationResponseDto responseDto = AuthenticationResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .userId(user.getId())
                 .build();
         return responseDto;
     }
@@ -78,10 +79,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String refreshToken = jwtFactory.generateRefreshToken(user);
 
         log.info("User authenticated successfully with email: {}", user.getEmail());
-
+    /*
+    user_id
+     */
         return AuthenticationResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .userId(user.getId())
                 .build();
     }
 
@@ -105,6 +109,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthenticationResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .userId(user.getId())
                 .build();
     }
 
