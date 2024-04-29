@@ -111,6 +111,32 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
+    @Override
+    public AuthenticationResponseDto registerOrUpdateUser(RegisterRequestDto requestDto) {
+        User user = userRepository.findByEmail(requestDto.email())
+                .map(existingUser -> {
+                    existingUser.setPassword(passwordEncoder.encode(requestDto.password())); // Обновляем пароль
+                    return userRepository.save(existingUser);
+                })
+                .orElseGet(() -> {
+                    User newUser = new User();
+                    newUser.setEmail(requestDto.email());
+                    newUser.setPassword(passwordEncoder.encode(requestDto.password()));
+                    newUser.setRole(Role.USER);
+                    return userRepository.save(newUser);
+                });
+
+        // Генерация новых токенов
+        String accessToken = jwtFactory.generateAccessToken(user);
+        String refreshToken = jwtFactory.generateRefreshToken(user);
+
+        return AuthenticationResponseDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .userId(user.getId())
+                .build();
+    }
+
 
 
 

@@ -37,10 +37,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user = userRepository.findByEmail(email)
                 .orElseGet(() -> createUser(email, oAuth2User.getAttributes()));
 
-        // Свои действия после успешной аутентификации/регистрации пользователя
         log.info("Authenticated user: {}", email);
 
-        // Возвращаем пользовательские данные с ролями в виде authorities
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRole().name())),
                 oAuth2User.getAttributes(),
