@@ -46,10 +46,6 @@ public class PasswordResetService {
         return passwordTokenResponse;
     }
 
-
-    private void saveResetCode(String email, String code) {
-    }
-
     private String generateCode() {
         return String.valueOf(new SecureRandom().nextInt(899999) + 100000);
     }

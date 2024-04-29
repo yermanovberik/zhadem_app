@@ -3,6 +3,7 @@ package com.app.zhardem.controllers;
 import com.app.zhardem.dto.PasswordTokenResponse;
 import com.app.zhardem.dto.Response;
 import com.app.zhardem.dto.user.*;
+import com.app.zhardem.exceptions.entity.EntityNotFoundException;
 import com.app.zhardem.services.UserService;
 import com.app.zhardem.services.impl.PasswordResetService;
 import jakarta.validation.Valid;
@@ -99,6 +100,10 @@ public class UserController {
     @PostMapping("/reset")
     public ResponseEntity<Response> resetPassword(@RequestHeader("token") String token, @RequestParam String newPassword) {
         boolean isSuccess = passwordResetService.resetPassword(token, newPassword);
+        log.info(newPassword.toString() + " password empty ?");
+        if(newPassword.equals("")){
+            throw new EntityNotFoundException("Empty password");
+        }
         Response response;
         if (isSuccess) {
             response = Response.builder()
