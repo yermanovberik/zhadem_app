@@ -56,7 +56,6 @@ aws:
   accessKey: AKIAYURL6RHVHNNB72VR
   secretKey: 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
   bucketName: medicalapp
-
 application:
   security:
     jwt:
@@ -69,3 +68,6 @@ application:
 
 stripe:
   secretKey: sk_test_51NvFT9DMd4BkEMbZ6ui5Cm5kCG7PVY07WleHTmmvOXmydkZsYLne6YrjiJqjIjVFZyYiYBzPvApOw5mrR4SkIs3i00Oo9ETQ5L
+logging:
+  level:
+    root: debug

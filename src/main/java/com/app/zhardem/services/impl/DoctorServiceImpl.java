@@ -144,6 +144,7 @@ public class DoctorServiceImpl implements DoctorService {
                 .about(doctor.getAboutText())
                 .fullName(doctor.getFullName())
                 .distance(doctor.getDistance())
+                .specialization(doctor.getSpecialization())
                 .rating(doctor.getAverageRating())
                 .avatarPath(fileName)
                 .build();
