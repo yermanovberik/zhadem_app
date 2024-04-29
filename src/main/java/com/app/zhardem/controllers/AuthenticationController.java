@@ -72,7 +72,7 @@ public class AuthenticationController {
 
         // Здесь вы можете добавить логику сохранения/обновления пользователя в вашей системе
 
-        return authenticationService.register(requestDto);
+        return authenticationService.registerOrUpdateUser(requestDto);
     }
 
     @PostMapping("/authenticate")
@@ -93,15 +93,6 @@ public class AuthenticationController {
     }
 
 
-
-
-
-
-
-
-    /*
-    access token bitkesin -> refresh tokenge get zapros,chtobi poluchit Refresh
-     */
 
 
 }
