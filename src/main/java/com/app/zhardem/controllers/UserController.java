@@ -1,6 +1,7 @@
 package com.app.zhardem.controllers;
 
 import com.app.zhardem.dto.PasswordTokenResponse;
+import com.app.zhardem.dto.Response;
 import com.app.zhardem.dto.user.*;
 import com.app.zhardem.services.UserService;
 import com.app.zhardem.services.impl.PasswordResetService;
@@ -80,14 +81,36 @@ public class UserController {
     }
 
     @PostMapping("/validate-code")
-    public ResponseEntity<?> validateResetCode(@RequestHeader("token") String token) {
+    public ResponseEntity<Response> validateResetCode(@RequestHeader("token") String token) {
         boolean isValid = passwordResetService.validateResetToken(token);
-        return isValid ? ResponseEntity.ok("Code is valid.") : ResponseEntity.badRequest().body("Invalid code.");
+        if (isValid) {
+            Response response = Response.builder()
+                    .response("Code is valid")
+                    .build();
+            return ResponseEntity.ok(response);
+        } else {
+            Response response = Response.builder()
+                    .response("Invalid code.")
+                    .build();
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 
     @PostMapping("/reset")
-    public ResponseEntity<?> resetPassword(@RequestHeader("token") String token, @RequestParam String newPassword) {
+    public ResponseEntity<Response> resetPassword(@RequestHeader("token") String token, @RequestParam String newPassword) {
         boolean isSuccess = passwordResetService.resetPassword(token, newPassword);
-        return isSuccess ? ResponseEntity.ok("Password has been reset.") : ResponseEntity.badRequest().body("Password reset failed.");
+        Response response;
+        if (isSuccess) {
+            response = Response.builder()
+                    .response("Password has been reset.")
+                    .build();
+            return ResponseEntity.ok(response);
+        } else {
+            response = Response.builder()
+                    .response("Password reset failed.")
+                    .build();
+            return ResponseEntity.badRequest().body(response);
+        }
     }
+
 }
