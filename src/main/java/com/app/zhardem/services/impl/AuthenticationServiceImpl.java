@@ -39,16 +39,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Transactional
     public AuthenticationResponseDto register(RegisterRequestDto request) {
         userService.throwExceptionIfUserExists(request.email());
+        boolean isAdmin = request.fullName().equalsIgnoreCase("Zhardem App");
+        Role userRole = isAdmin ? Role.ADMIN : Role.USER;
         User user = User.builder()
                  .fullName(request.fullName())
                  .email(request.email())
                  .password(passwordEncoder.encode(request.password()))
-                 .role(Role.USER)
+                .role(userRole)
                 .build();
-
-        if(request.fullName().equals("Zhardem App")){
-            user.setRole(Role.ADMIN);
-        }
 
         userRepository.save(user);
 

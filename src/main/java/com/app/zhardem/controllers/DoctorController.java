@@ -57,7 +57,8 @@ public class DoctorController {
                 .specialization(specialization)
                 .distance(distance)
                 .aboutText(aboutText)
-                .category(category)
+                .specialization(category)
+                .specialization(category)
                 .file(file)
                 .build();
         return doctorService.createWithAvatar(doctorRequestDto);
