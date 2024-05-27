@@ -3,6 +3,10 @@ package com.app.zhardem.controllers;
 import com.app.zhardem.dto.auth.AuthenticationRequestDto;
 import com.app.zhardem.dto.auth.AuthenticationResponseDto;
 import com.app.zhardem.dto.auth.RegisterRequestDto;
+import com.app.zhardem.exceptions.entity.EntityNotFoundException;
+import com.app.zhardem.jwt.JwtFactory;
+import com.app.zhardem.models.User;
+import com.app.zhardem.repositories.UserRepository;
 import com.app.zhardem.services.AuthenticationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
@@ -14,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -25,6 +30,8 @@ import java.util.UUID;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+    private final UserRepository userRepository;
+    private final JwtFactory jwtFactory;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -62,7 +69,6 @@ public class AuthenticationController {
         String userInfoEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + accessToken;
         Map<String, Object> userInfo = restTemplate.getForObject(userInfoEndpoint, Map.class);
 
-        // Извлечение email пользователя
         String email = (String) userInfo.get("email");
 
         RegisterRequestDto requestDto = RegisterRequestDto.builder()
@@ -70,10 +76,39 @@ public class AuthenticationController {
                 .password(UUID.randomUUID().toString())
                 .build();
 
-        // Здесь вы можете добавить логику сохранения/обновления пользователя в вашей системе
 
         return authenticationService.registerOrUpdateUser(requestDto);
     }
+    @GetMapping("/verify")
+    @ResponseBody
+    public ResponseEntity<AuthenticationResponseDto> verifyEmail(@RequestParam("code") String code) {
+        User user = userRepository.findByVerificationCode(code)
+                .orElseThrow(() -> new EntityNotFoundException("Invalid verification token"));
+
+        if (user.getCodeExpiration().isBefore(LocalDateTime.now())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    AuthenticationResponseDto.builder()
+                            .errorMessage("Token has expired")
+                            .build()
+            );
+        }
+
+        user.setVerificationCode(null);
+        user.setCodeExpiration(null);
+        userRepository.save(user);
+
+        String accessToken = jwtFactory.generateAccessToken(user);
+        String refreshToken = jwtFactory.generateRefreshToken(user);
+
+        AuthenticationResponseDto authenticationResponseDto = AuthenticationResponseDto.builder()
+                .userId(user.getId())
+                .refreshToken(refreshToken)
+                .accessToken(accessToken)
+                .build();
+
+        return ResponseEntity.ok(authenticationResponseDto);
+    }
+
 
     @PostMapping("/authenticate")
     @ResponseStatus(HttpStatus.OK)

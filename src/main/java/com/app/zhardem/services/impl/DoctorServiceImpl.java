@@ -77,7 +77,45 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public DoctorResponseDto update(long id, DoctorRequestDto requestDto) {
         Doctor doctor = getEntityById(id);
-        return null;
+        if (requestDto.fullName() != null && !requestDto.fullName().isEmpty()) {
+            doctor.setFullName(requestDto.fullName());
+        }
+        if (requestDto.aboutText() != null && !requestDto.aboutText().isEmpty()) {
+            doctor.setAboutText(requestDto.aboutText());
+        }
+        if (requestDto.distance() != 0) {
+            doctor.setDistance(requestDto.distance());
+        }
+        if (requestDto.specialization() != null && !requestDto.specialization().isEmpty()) {
+            doctor.setSpecialization(requestDto.specialization());
+        }
+        if (requestDto.priceOfDoctor() != 0) {
+            doctor.setPriceOfDoctor(requestDto.priceOfDoctor());
+        }
+
+        if (requestDto.file() != null) {
+            try {
+                String newFileName = fileService.uploadFile(requestDto.file());
+                doctor.setAvatarPath(newFileName);
+            } catch (IOException e) {
+                log.error("Error uploading file for doctor with ID " + id, e);
+            }
+        }
+
+        doctorRepository.save(doctor);
+
+        URL presignedUrl = fileService.generatePresignedUrl(doctor.getAvatarPath(), 60);
+        DoctorResponseDto responseDto = DoctorResponseDto.builder()
+                .id(doctor.getId())
+                .avatarPath(presignedUrl.toString())
+                .about(doctor.getAboutText())
+                .fullName(doctor.getFullName())
+                .distance(doctor.getDistance())
+                .specialization(doctor.getSpecialization())
+                .rating(doctor.getAverageRating())
+                .build();
+
+        return responseDto;
     }
 
     @Override

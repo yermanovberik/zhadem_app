@@ -19,6 +19,8 @@ public class PasswordResetService {
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private static final SecureRandom secureRandom = new SecureRandom();
+
 
 
     public void sendResetCode(String email) {
@@ -47,7 +49,8 @@ public class PasswordResetService {
     }
 
     private String generateCode() {
-        return String.valueOf(new SecureRandom().nextInt(899999) + 100000);
+        int code = 1000 + secureRandom.nextInt(9000);
+        return String.valueOf(code);
     }
 
 

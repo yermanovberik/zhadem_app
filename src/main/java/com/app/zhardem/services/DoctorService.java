@@ -17,4 +17,5 @@ public interface DoctorService extends CrudService<Doctor, DoctorRequestDto, Doc
 
          List<DoctorResponseDto> getRecentDoctors();
 
+
 }
