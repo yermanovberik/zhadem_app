@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByDoctor(Doctor doctor);
+    List<Review> findByDoctorOrderByCreatedAt(Doctor doctor);
+
 }

@@ -4,7 +4,6 @@ import com.app.zhardem.dto.ApiExceptionResponseDto;
 import com.app.zhardem.exceptions.ApiAuthenticationException;
 import com.app.zhardem.exceptions.ApiExceptionResponseFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

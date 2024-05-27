@@ -66,8 +66,27 @@ public class DoctorController {
 
 
     @PutMapping("/{id}")
-    public DoctorResponseDto updateDoctor(@PathVariable long id, @RequestBody @Valid DoctorRequestDto requestDto) {
-        return doctorService.update(id, requestDto);
+    public DoctorResponseDto updateDoctor(
+            @RequestParam("id") long id,
+            @RequestParam("fullName") String fullName,
+            @RequestParam("distance") double distance,
+            @RequestParam("specialization") String specialization,
+            @RequestParam("aboutText") String aboutText,
+            @RequestParam("category") String category,
+            @RequestParam("priceOfDoctor") int priceOfDoctor,
+            @RequestParam("file") MultipartFile file
+    ) {
+        DoctorRequestDto doctorRequestDto = DoctorRequestDto.builder()
+                .fullName(fullName)
+                .priceOfDoctor(priceOfDoctor)
+                .specialization(specialization)
+                .distance(distance)
+                .aboutText(aboutText)
+                .specialization(category)
+                .specialization(category)
+                .file(file)
+                .build();
+        return doctorService.update(id, doctorRequestDto);
     }
 
     @DeleteMapping("/{id}")

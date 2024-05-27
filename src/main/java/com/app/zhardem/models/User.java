@@ -81,6 +81,12 @@ public class User implements UserDetails {
     @Column(name = "reset_token")
     private String resetToken;
 
+    @Column(name = "verification_code")
+    private String verificationCode;
+
+    @Column(name = "code_expiration")
+    private LocalDateTime codeExpiration;
+
     @Column(name = "reset_token_expiration")
     private LocalDateTime resetTokenExpiration;
 

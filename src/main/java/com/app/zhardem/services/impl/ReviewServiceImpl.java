@@ -126,8 +126,7 @@ public class ReviewServiceImpl implements ReviewService {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new com.app.zhardem.exceptions.entity.EntityNotFoundException("Doctor with this id " + doctorId + " not found!"));
 
-        List<Review> reviews = reviewRepository.findByDoctor(doctor);
-
+        List<Review> reviews = reviewRepository.findByDoctorOrderByCreatedAt(doctor);
         List<ReviewResponseDto> reviewOfDoctor = new ArrayList<>();
 
         for(Review review : reviews){

@@ -22,6 +22,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,6 +38,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtParser jwtParser;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
+    private static final SecureRandom secureRandom = new SecureRandom();
+
 
     @Override
     @Transactional
@@ -42,23 +49,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         boolean isAdmin = request.fullName().equalsIgnoreCase("Zhardem App");
         Role userRole = isAdmin ? Role.ADMIN : Role.USER;
         User user = User.builder()
-                 .fullName(request.fullName())
-                 .email(request.email())
-                 .password(passwordEncoder.encode(request.password()))
+                .fullName(request.fullName())
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
                 .role(userRole)
                 .build();
 
         userRepository.save(user);
 
-        String accessToken = jwtFactory.generateAccessToken(user);
-        String refreshToken = jwtFactory.generateRefreshToken(user);
-        AuthenticationResponseDto responseDto = AuthenticationResponseDto.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .userId(user.getId())
-                .build();
-        return responseDto;
+        String verificationToken = UUID.randomUUID().toString();
+        user.setVerificationCode(verificationToken);
+        user.setCodeExpiration(LocalDateTime.now().plusHours(24));
+        userRepository.save(user);
+
+        String emailBody = "Code is " + verificationToken;
+        emailService.sendVerificationEmail(user.getEmail(), "Email Verification", emailBody);
+
+        return new AuthenticationResponseDto(null, null, user.getId(),"null");
     }
+    private String generateCode() {
+        int code = 1000 + secureRandom.nextInt(9000);
+        return String.valueOf(code);
+    }
+
 
     @Override
     public AuthenticationResponseDto authenticate(AuthenticationRequestDto request) {
