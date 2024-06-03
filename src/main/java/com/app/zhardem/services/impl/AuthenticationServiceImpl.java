@@ -57,7 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         userRepository.save(user);
 
-        String verificationToken = UUID.randomUUID().toString();
+        String verificationToken = generateCode();
         user.setVerificationCode(verificationToken);
         user.setCodeExpiration(LocalDateTime.now().plusHours(24));
         userRepository.save(user);
