@@ -79,7 +79,7 @@ public class AuthenticationController {
 
         return authenticationService.registerOrUpdateUser(requestDto);
     }
-    @GetMapping("/verify")
+    @PostMapping("/verify")
     @ResponseBody
     public ResponseEntity<AuthenticationResponseDto> verifyEmail(@RequestParam("code") String code) {
         User user = userRepository.findByVerificationCode(code)
