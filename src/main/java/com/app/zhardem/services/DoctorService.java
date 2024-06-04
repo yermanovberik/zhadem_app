@@ -1,6 +1,7 @@
 package com.app.zhardem.services;
 
 import com.app.zhardem.dto.doctor.DoctopTopResponse;
+import com.app.zhardem.dto.doctor.DoctorLocationsDto;
 import com.app.zhardem.dto.doctor.DoctorRequestDto;
 import com.app.zhardem.dto.doctor.DoctorResponseDto;
 import com.app.zhardem.models.Doctor;
@@ -17,5 +18,6 @@ public interface DoctorService extends CrudService<Doctor, DoctorRequestDto, Doc
 
          List<DoctorResponseDto> getRecentDoctors();
 
+         List<DoctorLocationsDto> getLocationsDoctors();
 
 }

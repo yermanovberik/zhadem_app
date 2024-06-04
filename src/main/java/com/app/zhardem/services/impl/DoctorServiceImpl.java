@@ -2,6 +2,7 @@ package com.app.zhardem.services.impl;
 
 import com.app.zhardem.dto.category.CategoryRequestDto;
 import com.app.zhardem.dto.doctor.DoctopTopResponse;
+import com.app.zhardem.dto.doctor.DoctorLocationsDto;
 import com.app.zhardem.dto.doctor.DoctorRequestDto;
 import com.app.zhardem.dto.doctor.DoctorResponseDto;
 import com.app.zhardem.exceptions.entity.EntityAlreadyExistsException;
@@ -207,6 +208,25 @@ public class DoctorServiceImpl implements DoctorService {
             getRecentDoctors.add(doctorResponseDto);
         }
         return getRecentDoctors;
+    }
+
+    @Override
+    public List<DoctorLocationsDto> getLocationsDoctors() {
+        List<Doctor> doctors = doctorRepository.findAll();
+
+        List<DoctorLocationsDto> locationsDtos = new ArrayList<>();
+
+        for(Doctor doctor : doctors){
+            String fileName = doctor.getAvatarPath();
+            URL presignedUrl = fileService.generatePresignedUrl(fileName, 60);
+            DoctorLocationsDto doctorLocationsDto = DoctorLocationsDto.builder()
+                    .id(doctor.getId())
+                    .location(doctor.getLocation())
+                    .avatarPath(presignedUrl.toString())
+                    .build();
+            locationsDtos.add(doctorLocationsDto);
+        }
+        return locationsDtos;
     }
 
 }

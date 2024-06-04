@@ -40,6 +40,9 @@ public class Doctor {
     @Column(name = "price_of_doctor")
     private int priceOfDoctor;
 
+    @Column(name = "location")
+    private String location;
+
     @OneToMany(mappedBy = "doctor")
     private List<Review> reviews;
 

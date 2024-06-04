@@ -1,8 +1,10 @@
 package com.app.zhardem.controllers;
 
 import com.app.zhardem.dto.doctor.DoctopTopResponse;
+import com.app.zhardem.dto.doctor.DoctorLocationsDto;
 import com.app.zhardem.dto.doctor.DoctorRequestDto;
 import com.app.zhardem.dto.doctor.DoctorResponseDto;
+import com.app.zhardem.models.Doctor;
 import com.app.zhardem.services.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -87,6 +90,12 @@ public class DoctorController {
                 .file(file)
                 .build();
         return doctorService.update(id, doctorRequestDto);
+    }
+
+    @GetMapping("/getLocations")
+    @ResponseStatus(HttpStatus.OK)
+    public List<DoctorLocationsDto> getLocationsDoctors() {
+        return doctorService.getLocationsDoctors();
     }
 
     @DeleteMapping("/{id}")
