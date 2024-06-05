@@ -150,6 +150,7 @@ public class DoctorServiceImpl implements DoctorService {
             String fileName =  (String) row[4];
             URL presignedUrl = fileService.generatePresignedUrl(fileName, 60);
             DoctopTopResponse response = new DoctopTopResponse(
+                    (Long) row[0],
                     (String) row[1],
                     presignedUrl.toString(),
                     (String) row[2],
