@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -45,28 +46,47 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public AuthenticationResponseDto register(RegisterRequestDto request) {
-        userService.throwExceptionIfUserExists(request.email());
-        boolean isAdmin = request.fullName().equalsIgnoreCase("Zhardem App");
-        Role userRole = isAdmin ? Role.ADMIN : Role.USER;
-        User user = User.builder()
-                .fullName(request.fullName())
-                .email(request.email())
-                .password(passwordEncoder.encode(request.password()))
-                .role(userRole)
-                .build();
+        Optional<User> existingUserOpt = userRepository.findByEmail(request.email());
 
-        userRepository.save(user);
+        if (existingUserOpt.isPresent()) {
+            User existingUser = existingUserOpt.get();
+            if (existingUser.getVerificationCode() == null) {
+                throw new com.app.zhardem.exceptions.entity.EntityNotFoundException("Email is already registered and verified.");
+            } else {
+                String newVerificationToken = generateCode();
+                existingUser.setVerificationCode(newVerificationToken);
+                existingUser.setCodeExpiration(LocalDateTime.now().plusHours(24));
+                userRepository.save(existingUser);
 
-        String verificationToken = generateCode();
-        user.setVerificationCode(verificationToken);
-        user.setCodeExpiration(LocalDateTime.now().plusHours(24));
-        userRepository.save(user);
+                String emailBody = "Your new verification code is " + newVerificationToken;
+                emailService.sendVerificationEmail(existingUser.getEmail(), "Email Verification", emailBody);
 
-        String emailBody = "Code is " + verificationToken;
-        emailService.sendVerificationEmail(user.getEmail(), "Email Verification", emailBody);
+                return new AuthenticationResponseDto(null, null, existingUser.getId(), "Verification code resent");
+            }
+        } else {
+            boolean isAdmin = request.fullName().equalsIgnoreCase("Zhardem App");
+            Role userRole = isAdmin ? Role.ADMIN : Role.USER;
+            User newUser = User.builder()
+                    .fullName(request.fullName())
+                    .email(request.email())
+                    .password(passwordEncoder.encode(request.password()))
+                    .role(userRole)
+                    .build();
 
-        return new AuthenticationResponseDto(null, null, user.getId(),"null");
+            userRepository.save(newUser);
+
+            String verificationToken = generateCode();
+            newUser.setVerificationCode(verificationToken);
+            newUser.setCodeExpiration(LocalDateTime.now().plusHours(24));
+            userRepository.save(newUser);
+
+            String emailBody = "Your verification code is " + verificationToken;
+            emailService.sendVerificationEmail(newUser.getEmail(), "Email Verification", emailBody);
+
+            return new AuthenticationResponseDto(null, null, newUser.getId(), "Verification code sent");
+        }
     }
+
     private String generateCode() {
         int code = 1000 + secureRandom.nextInt(9000);
         return String.valueOf(code);
