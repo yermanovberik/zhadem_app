@@ -59,7 +59,7 @@ public class StripeService {
         SessionCreateParams.LineItem.PriceData priceData =
                 SessionCreateParams.LineItem.PriceData.builder()
                         .setCurrency("USD")
-                        .setUnitAmount(appointments.getAmountPaid())
+                        .setUnitAmount(Long.valueOf(appointments.getDoctor().getPriceOfDoctor()))
                         .setProductData(productData)
                         .build();
 
