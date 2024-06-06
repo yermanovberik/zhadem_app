@@ -14,11 +14,13 @@ import com.app.zhardem.repositories.AppointmentsRepository;
 import com.app.zhardem.repositories.DoctorRepository;
 import com.app.zhardem.repositories.UserRepository;
 import com.app.zhardem.services.AppointmentsService;
+import com.app.zhardem.services.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,6 +36,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
     private final DoctorRepository doctorRepository;
     private final AppointmentsRepository appointmentsRepository;
     private final UserRepository userRepository;
+    private final FileService fileService;
 
     @Override
     public List<AppointmentsResponseDto> getDoctorAvailability(Long doctorId, int dayNumber) {
@@ -88,12 +91,14 @@ public class AppointmentsServiceImpl implements AppointmentsService {
 
         List<ScheduledDto> responseDto = new ArrayList<>();
         for(Appointments appointments1 : appointments){
+            String fileName =  appointments1.getDoctor().getAvatarPath();
+            URL presignedUrl = fileService.generatePresignedUrl(fileName, 60);
             ScheduledDto scheduledDto = ScheduledDto.builder()
                     .status(appointments1.getStatus())
                     .date(appointments1.getDate())
                     .specialization(appointments1.getDoctor().getSpecialization())
                     .fullName(appointments1.getDoctor().getFullName())
-                    .avatarPath(appointments1.getDoctor().getAvatarPath())
+                    .avatarPath(presignedUrl.toString())
                     .time(appointments1.getTime())
                     .build();
 
