@@ -197,13 +197,15 @@ public class DoctorServiceImpl implements DoctorService {
         List<Doctor> allDoctors = doctorRepository.findAll();
         List<DoctorResponseDto> getRecentDoctors = new ArrayList<>();
         for(Doctor doctor : allDoctors){
+            String fileName =  doctor.getAvatarPath();
+            URL presignedUrl = fileService.generatePresignedUrl(fileName, 60);
             DoctorResponseDto doctorResponseDto = DoctorResponseDto.builder()
                     .id(doctor.getId())
                     .avatarPath(doctor.getAvatarPath())
                     .rating(doctor.getAverageRating())
                     .fullName(doctor.getFullName())
                     .specialization(doctor.getSpecialization())
-                    .avatarPath(doctor.getAvatarPath())
+                    .avatarPath(presignedUrl.toString())
                     .build();
             log.info("Avatar path is " + doctor.getAvatarPath());
             getRecentDoctors.add(doctorResponseDto);
